@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class UserSignIn extends Component {
   state = {
@@ -21,6 +22,7 @@ class UserSignIn extends Component {
       .signIn(emailAddress, password)
       .then(user => {
         if (user) {
+          this.props.history.push('/');
           console.log(`SUCCESS! ${user.name} is now signed in!`);
         } else {
           this.setState(() => ({ errors: ['Sign-in was unsuccessful'] }));
@@ -35,7 +37,7 @@ class UserSignIn extends Component {
   };
 
   render() {
-    const { emailAddress, password } = this.state;
+    const { emailAddress, password, errors } = this.state;
     return (
       <React.Fragment>
         <hr />
@@ -43,6 +45,7 @@ class UserSignIn extends Component {
           <div className='grid-33 centered signin'>
             <h1>Sign In</h1>
             <div>
+              <ErrorsDisplay errors={errors} />
               <form onSubmit={this.submit}>
                 <div>
                   <input
@@ -76,7 +79,9 @@ class UserSignIn extends Component {
             </div>
             <p>&nbsp;</p>
             <p>
-              Don't have a user account? <a href='sign-up.html'>Click here</a> to sign up!
+              Don't have a user account?
+              <Link to='/signup'>Click here</Link>
+              to sign up!
             </p>
           </div>
         </div>
@@ -84,5 +89,23 @@ class UserSignIn extends Component {
     );
   }
 }
+
+const ErrorsDisplay = ({ errors }) => {
+  if (errors.length) {
+    return (
+      <div>
+        <h2 className='validation--errors--label'>Validation errors</h2>
+        <div className='validation-errors'>
+          <ul>
+            {errors.map((error, i) => (
+              <li key={i}>{error}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
 
 export default UserSignIn;
