@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Cookies from 'js-cookie';
 import Data from './Data';
 
 const Context = React.createContext();
@@ -6,13 +7,15 @@ const Context = React.createContext();
 class Provider extends Component {
   data = new Data();
   state = {
-    authenticatedUser: null,
+    authenticatedUser: Cookies.getJSON('authenticatedUser') || null,
   };
 
   signIn = async (username, password) => {
     const user = await this.data.getUser(username, password);
     if (user) {
       this.setState(() => ({ authenticatedUser: user }));
+      // save cookie
+      Cookies.set('authenticatedUser', JSON.stringify(user), { expires: 2 });
     }
     return user;
   };
