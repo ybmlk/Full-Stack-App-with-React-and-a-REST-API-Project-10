@@ -4,6 +4,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const { sequelize } = require('./models');
+/* No need to Import Cors library because
+"proxy": "http://localhost:5000" is added in the client's 'package.json' file */
 
 // import routes
 const indexRouter = require('./routes');
