@@ -1,43 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      courses: [],
-    };
-  }
+// Import components
+import Header from './components/Header';
+import Courses from './components/Courses';
+import CreateCourse from './components/CreateCourse';
+import UpdateCourse from './components/UpdateCourse';
+import CourseDetail from './components/CourseDetail';
+import UserSignIn from './components/UserSignIn';
+import UserSignUp from './components/UserSignUp';
+import UserSignOut from './components/UserSignOut';
+import withContext from './Context';
 
-  componentDidMount() {
-    fetch('/api/courses')
-      .then(res => res.json())
-      .then(courses => this.setState({ courses }));
-  }
+// Connect componets to context
+const UserSignInWithContext = withContext(UserSignIn)
 
-  render() {
-    return (
-      <div>
-        <p>Hello World</p>
-        <ul>
-          {this.state.courses.map(course => {
-            return (
-              <li key={course.id}>
-                <p>
-                  Title: <br />
-                  {course.title}
-                </p>
-                <p>
-                  Description:
-                  <br />
-                  {course.description}
-                </p>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    );
-  }
-}
+const App = () => (
+  <Router>
+    <div>
+      <Header />
+      <Switch>
+        <Route exact path='/' component={Courses} />
+        <Route path='/courses/create' component={CreateCourse} />
+        <Route path='/courses/:id/update' component={UpdateCourse} />
+        <Route path='/courses/:id' component={CourseDetail} />
+        <Route path='/signin' component={UserSignInWithContext} />
+        <Route path='/signup' component={UserSignUp} />
+        <Route path='/signout' component={UserSignOut} />
+      </Switch>
+    </div>
+  </Router>
+);
 
 export default App;

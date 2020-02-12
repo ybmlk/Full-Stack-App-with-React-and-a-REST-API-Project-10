@@ -1,13 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 class CreateCourse extends Component {
   render() {
-    return (
-      <div>
-        
-      </div>
-    )
+    return <div></div>;
   }
 }
 
-export default CreateCourse
+export default CreateCourse;
