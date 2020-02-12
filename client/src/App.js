@@ -13,9 +13,10 @@ import UserSignOut from './components/UserSignOut';
 import withContext from './Context';
 
 // Connect componets to context
-const HeaderWithContext = withContext(Header)
+const HeaderWithContext = withContext(Header);
 const CoursesWithContext = withContext(Courses);
 const UserSignInWithContext = withContext(UserSignIn);
+const UserSignOutWithContext = withContext(UserSignOut);
 
 const App = () => (
   <Router>
@@ -28,7 +29,7 @@ const App = () => (
         <Route path='/courses/:id' component={CourseDetail} />
         <Route path='/signin' component={UserSignInWithContext} />
         <Route path='/signup' component={UserSignUp} />
-        <Route path='/signout' component={UserSignOut} />
+        <Route path='/signout' component={UserSignOutWithContext} />
       </Switch>
     </div>
   </Router>

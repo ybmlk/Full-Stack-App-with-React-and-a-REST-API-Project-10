@@ -20,6 +20,11 @@ class Provider extends Component {
     return user;
   };
 
+  signOut = () => {
+    this.setState(() => ({ authenticatedUser: null }));
+    Cookies.remove('authenticatedUser');
+  };
+
   render() {
     const { authenticatedUser } = this.state;
     const value = {
@@ -27,6 +32,7 @@ class Provider extends Component {
       data: this.data,
       actions: {
         signIn: this.signIn,
+        signOut: this.signOut
       },
     };
 
