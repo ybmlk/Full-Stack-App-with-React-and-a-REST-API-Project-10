@@ -14,6 +14,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "server": "cd ../api && npm start",
+    "dev": "concurrently \"npm start\" \"npm run server\" ",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -33,5 +35,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000/api"
+  "proxy": "http://localhost:5000/api",
+  "devDependencies": {
+    "concurrently": "^5.1.0"
+  }
 }

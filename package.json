@@ -1,0 +1,21 @@
+{
+  "name": "project-10",
+  "version": "1.0.0",
+  "description": "Full Stack App with React and a REST API",
+  "main": "",
+  "scripts": {
+    "start": "cd client && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ybmlk/Project-10-Full-Stack-App-with-React-and-a-REST-API.git"
+  },
+  "keywords": [],
+  "author": "Yonatan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ybmlk/Project-10-Full-Stack-App-with-React-and-a-REST-API/issues"
+  },
+  "homepage": "https://github.com/ybmlk/Project-10-Full-Stack-App-with-React-and-a-REST-API#readme"
+}
