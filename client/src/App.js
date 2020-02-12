@@ -15,6 +15,7 @@ import withContext from './Context';
 // Connect componets to context
 const HeaderWithContext = withContext(Header);
 const CoursesWithContext = withContext(Courses);
+const CourseDetailWithContext = withContext(CourseDetail);
 const UserSignInWithContext = withContext(UserSignIn);
 const UserSignOutWithContext = withContext(UserSignOut);
 
@@ -26,7 +27,7 @@ const App = () => (
         <Route exact path='/' component={CoursesWithContext} />
         <Route path='/courses/create' component={CreateCourse} />
         <Route path='/courses/:id/update' component={UpdateCourse} />
-        <Route path='/courses/:id' component={CourseDetail} />
+        <Route path='/courses/:id' component={CourseDetailWithContext} />
         <Route path='/signin' component={UserSignInWithContext} />
         <Route path='/signup' component={UserSignUp} />
         <Route path='/signout' component={UserSignOutWithContext} />

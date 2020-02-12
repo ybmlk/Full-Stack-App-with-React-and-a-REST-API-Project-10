@@ -29,7 +29,7 @@ class Data {
   }
 
   async getCourse(id) {
-    const response = await this.api(`/courses${id}`);
+    const response = await this.api(`/courses/${id}`);
     if (response.status === 200) {
       return response.json();
     } else {
