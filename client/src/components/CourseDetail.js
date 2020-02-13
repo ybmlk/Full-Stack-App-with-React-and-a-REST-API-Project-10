@@ -7,15 +7,18 @@ class CourseDetail extends Component {
     user: {},
     materialsNeeded: [],
   };
+
   componentDidMount() {
     const { context, match } = this.props;
     const { data } = context;
     const id = match.params.id;
+
     data.getCourse(id).then(course => {
       this.setState(() => ({
         course: course[0],
         user: course[0].user,
       }));
+
       // if 'materialsNeeded' is not null, the string will be split into array
       if (this.state.course.materialsNeeded) {
         this.setState(() => ({
@@ -26,10 +29,19 @@ class CourseDetail extends Component {
   }
 
   render() {
-    console.log(this.state.materialsNeeded);
+    const { context } = this.props;
+    const owner = this.state.user.id;
+    const authUser = context.authenticatedUser ? context.authenticatedUser.id : null;
+    let actionBar = null;
+
+    if (owner !== undefined) {
+      if (authUser === owner) {
+        actionBar = <ActionsBar id={this.state.course.id} />;
+      }
+    }
     return (
       <div>
-        <ActionsBar id={this.state.course.id} />
+        {actionBar}
 
         <div className='bounds course--detail'>
           <Body {...this.state.course} {...this.state.user} />

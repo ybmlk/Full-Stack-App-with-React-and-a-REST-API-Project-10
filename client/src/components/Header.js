@@ -13,7 +13,7 @@ const Header = ({ context }) => {
           <nav>
             {authUser ? (
               <React.Fragment>
-                <span>Welcome, {authUser.name}!</span>
+                <span>Welcome, {authUser.firstName}!</span>
                 <Link className='signout' to='/signout'>
                   Sign Out
                 </Link>
