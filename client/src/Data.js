@@ -30,7 +30,7 @@ class Data {
 
   async getCourse(id) {
     const response = await this.api(`/courses/${id}`);
-    return response
+    return response;
   }
 
   async createUser(user) {
@@ -57,7 +57,7 @@ class Data {
 
   async createCourse(course, username, password) {
     const response = await this.api('/courses', 'POST', course, true, { username, password });
-    if (response.status === 201) {
+    /* if (response.status === 201) {
       return [];
     } else if (response.status === 400) {
       return response.json().then(data => data.errors);
@@ -65,7 +65,8 @@ class Data {
       return null;
     } else {
       throw new Error();
-    }
+    } */
+    return response;
   }
 
   async updateCourse(id, course, username, password) {

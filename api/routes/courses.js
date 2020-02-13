@@ -116,7 +116,7 @@ router.post(
       course.userId = req.currentUser.id;
       const currentCourse = await Course.create(course);
       res.setHeader('Location', `/api/course/${currentCourse.id}`);
-      res.status(201).end();
+      res.status(201).json({courseId: currentCourse.id})
     }
   })
 );

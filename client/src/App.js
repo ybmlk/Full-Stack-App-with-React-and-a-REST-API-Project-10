@@ -16,6 +16,7 @@ import PrivateRoute from './PrivateRoute';
 // Connect componets to context
 const HeaderWithContext = withContext(Header);
 const CoursesWithContext = withContext(Courses);
+const CreateCourseWithContext = withContext(CreateCourse);
 const UpdateCourseWithContext = withContext(UpdateCourse);
 const CourseDetailWithContext = withContext(CourseDetail);
 const UserSignInWithContext = withContext(UserSignIn);
@@ -27,7 +28,7 @@ const App = () => (
       <HeaderWithContext />
       <Switch>
         <Route exact path='/' component={CoursesWithContext} />
-        <Route path='/courses/create' component={CreateCourse} />
+        <PrivateRoute path='/courses/create' component={CreateCourseWithContext} />
         <PrivateRoute path='/courses/:id/update' component={UpdateCourseWithContext} />
         <Route path='/courses/:id' component={CourseDetailWithContext} />
         <Route path='/signin' component={UserSignInWithContext} />
