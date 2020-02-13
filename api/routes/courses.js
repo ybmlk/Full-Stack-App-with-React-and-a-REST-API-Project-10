@@ -128,10 +128,14 @@ router.put(
   [
     check('title')
       .exists()
-      .withMessage('"title" is required'),
+      .withMessage('"title" is required')
+      .notEmpty()
+      .withMessage('Please enter a "title"'),
     check('description')
       .exists()
-      .withMessage('"description" is required'),
+      .withMessage('"description" is required')
+      .notEmpty()
+      .withMessage('Please enter a "description"'),
   ],
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);

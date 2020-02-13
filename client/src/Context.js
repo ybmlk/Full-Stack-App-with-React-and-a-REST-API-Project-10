@@ -13,6 +13,7 @@ class Provider extends Component {
   signIn = async (username, password) => {
     const user = await this.data.getUser(username, password);
     if (user) {
+      user.password = password
       this.setState(() => ({ authenticatedUser: user }));
       // save cookie
       Cookies.set('authenticatedUser', JSON.stringify(user), { expires: 2 });

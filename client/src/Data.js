@@ -30,11 +30,7 @@ class Data {
 
   async getCourse(id) {
     const response = await this.api(`/courses/${id}`);
-    if (response.status === 200) {
-      return response.json();
-    } else {
-      throw new Error();
-    }
+    return response
   }
 
   async createUser(user) {
@@ -70,6 +66,11 @@ class Data {
     } else {
       throw new Error();
     }
+  }
+
+  async updateCourse(id, course, username, password) {
+    const response = await this.api(`/courses/${id}`, 'PUT', course, true, { username, password });
+    return response;
   }
 }
 

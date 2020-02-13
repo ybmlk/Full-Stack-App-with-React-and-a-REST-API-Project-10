@@ -16,7 +16,12 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
               // Not just any authorized person
               if (props.match.params.id) {
                 return (
-                  <AuthOwner id={props.match.params.id} component={Component} context={context} />
+                  <AuthOwner
+                    {...props}
+                    id={props.match.params.id}
+                    component={Component}
+                    context={context}
+                  />
                 );
               }
               return <Component {...props} />;

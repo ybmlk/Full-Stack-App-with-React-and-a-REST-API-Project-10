@@ -13,19 +13,32 @@ class CourseDetail extends Component {
     const { data } = context;
     const id = match.params.id;
 
-    data.getCourse(id).then(course => {
-      this.setState(() => ({
-        course: course[0],
-        user: course[0].user,
-      }));
-
-      // if 'materialsNeeded' is not null, the string will be split into array
-      if (this.state.course.materialsNeeded) {
-        this.setState(() => ({
-          materialsNeeded: this.state.course.materialsNeeded.replace('*', '').split('\n*'),
-        }));
-      }
-    });
+    data
+      .getCourse(id)
+      .then(async res => {
+        if (res.status === 200) {
+          const course = await res.json();
+          this.setState(() => ({
+            course: course[0],
+            user: course[0].user,
+          }));
+          // if 'materialsNeeded' is not null, the string will be split into array
+          if (this.state.course.materialsNeeded) {
+            this.setState(() => ({
+              materialsNeeded: this.state.course.materialsNeeded.replace('*', '').split('\n*'),
+            }));
+          }
+        } else {
+          // ! Add 404 page
+          alert('404 Page Not found');
+          this.props.history.push('/');
+        }
+      })
+      .catch(err => {
+        // ! Add error page
+        console.log(err);
+        this.props.history.push('/');
+      });
   }
 
   render() {
@@ -41,7 +54,16 @@ class CourseDetail extends Component {
     }
     return (
       <div>
-        {actionBar}
+        <div className='actions--bar'>
+          <div className='bounds'>
+            <div className='grid-100'>
+              {actionBar}
+              <Link className='button button-secondary' to='/'>
+                Return to List
+              </Link>
+            </div>
+          </div>
+        </div>
 
         <div className='bounds course--detail'>
           <Body {...this.state.course} {...this.state.user} />
@@ -56,23 +78,14 @@ class CourseDetail extends Component {
 }
 
 const ActionsBar = ({ id }) => (
-  <div className='actions--bar'>
-    <div className='bounds'>
-      <div className='grid-100'>
-        <span>
-          <Link className='button' to={`/courses/${id}/update`}>
-            Update Course
-          </Link>
-          <Link className='button' to='/'>
-            Delete Course
-          </Link>
-        </span>
-        <Link className='button button-secondary' to='/'>
-          Return to List
-        </Link>
-      </div>
-    </div>
-  </div>
+  <span>
+    <Link className='button' to={`/courses/${id}/update`}>
+      Update Course
+    </Link>
+    <Link className='button' to='/'>
+      Delete Course
+    </Link>
+  </span>
 );
 
 const Body = ({ title, description, firstName, lastName }) => {

@@ -7,14 +7,28 @@ class AuthOwner extends Component {
   };
 
   componentDidMount() {
-    const { context, id } = this.props;
+    const { context, id, history } = this.props;
     const { data } = context;
 
-    data.getCourse(id).then(course => {
-      this.setState(() => ({
-        user: course[0].user,
-      }));
-    });
+    data
+      .getCourse(id)
+      .then(async res => {
+        if (res.status === 200) {
+          const course = await res.json();
+          this.setState(() => ({
+            user: course[0].user,
+          }));
+        } else {
+          // ! Add 404 page
+          alert('404 Page Not found');
+          history.push('/');
+        }
+      })
+      .catch(err => {
+        // ! Add error page
+        console.log(err);
+        history.push('/');
+      });
   }
   render() {
     const { component: Component, id, context, ...rest } = this.props;
@@ -29,6 +43,7 @@ class AuthOwner extends Component {
             if (authUser === owner) {
               return <Component {...props} />;
             } else {
+              // ! Add Forbidden page
               alert('You can only update your own courses!');
               return <Redirect to={`/courses/${id}`} />;
             }

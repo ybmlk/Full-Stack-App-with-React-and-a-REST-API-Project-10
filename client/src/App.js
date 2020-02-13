@@ -33,6 +33,7 @@ const App = () => (
         <Route path='/signin' component={UserSignInWithContext} />
         <Route path='/signup' component={UserSignUp} />
         <Route path='/signout' component={UserSignOutWithContext} />
+        {/* ! ADD 404 page */}
       </Switch>
     </div>
   </Router>

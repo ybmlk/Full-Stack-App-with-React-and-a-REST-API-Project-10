@@ -23,7 +23,7 @@ class UserSignIn extends Component {
       .then(user => {
         if (user) {
           this.props.history.push('/');
-          console.log(`SUCCESS! ${user.name} is now signed in!`);
+          console.log(`SUCCESS! ${user.firstName} ${user.lastName} is now signed in!`);
         } else {
           this.setState(() => ({ errors: ['Sign-in was unsuccessful'] }));
         }
