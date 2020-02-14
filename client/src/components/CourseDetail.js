@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 
 class CourseDetail extends Component {
   state = {
     course: {},
     user: {},
-    materialsNeeded: [],
   };
 
   componentDidMount() {
@@ -22,12 +22,6 @@ class CourseDetail extends Component {
             course: course[0],
             user: course[0].user,
           }));
-          // if 'materialsNeeded' is not null, the string will be split into array
-          if (this.state.course.materialsNeeded) {
-            this.setState(() => ({
-              materialsNeeded: this.state.course.materialsNeeded.replace('*', '').split('\n*'),
-            }));
-          }
         } else {
           this.props.history.push('/notfound');
         }
@@ -48,10 +42,7 @@ class CourseDetail extends Component {
         <ActionsBar authUser={authUser} owner={owner} id={this.state.course.id} />
         <div className='bounds course--detail'>
           <Body {...this.state.course} {...this.state.user} />
-          <SideBar
-            estimatedTime={this.state.course.estimatedTime}
-            materialsNeeded={this.state.materialsNeeded}
-          />
+          <SideBar {...this.state.course} />
         </div>
       </div>
     );
@@ -95,7 +86,7 @@ const Body = ({ title, description, firstName, lastName }) => {
         <p>By {`${firstName} ${lastName}`}</p>
       </div>
       <div className='course--description'>
-        <p style={{ whiteSpace: 'pre-line' }}>{description}</p>
+        <ReactMarkdown source={description} />
       </div>
     </div>
   );
@@ -113,9 +104,7 @@ const SideBar = ({ estimatedTime, materialsNeeded }) => {
           <li className='course--stats--list--item'>
             <h4>Materials Needed</h4>
             <ul>
-              {materialsNeeded.map((material, i) => (
-                <li key={i}>{material}</li>
-              ))}
+              <ReactMarkdown source={materialsNeeded} />
             </ul>
           </li>
         </ul>
