@@ -43,22 +43,12 @@ class CourseDetail extends Component {
 
   render() {
     const { context } = this.props;
-    const owner = this.state.user.id;
     const authUser = context.authenticatedUser ? context.authenticatedUser.id : null;
+    const owner = this.state.user.id;
 
     return (
       <div>
-        <div className='actions--bar'>
-          <div className='bounds'>
-            <div className='grid-100'>
-              {authUser === owner && <ActionsBar id={this.state.course.id} />}
-              <Link className='button button-secondary' to='/'>
-                Return to List
-              </Link>
-            </div>
-          </div>
-        </div>
-
+        <ActionsBar authUser={authUser} owner={owner} id={this.state.course.id} />
         <div className='bounds course--detail'>
           <Body {...this.state.course} {...this.state.user} />
           <SideBar
@@ -71,16 +61,29 @@ class CourseDetail extends Component {
   }
 }
 
-const ActionsBar = ({ id }) => (
-  <span>
-    <Link className='button' to={`/courses/${id}/update`}>
-      Update Course
-    </Link>
-    <Link className='button' to='/'>
-      Delete Course
-    </Link>
-  </span>
-);
+const ActionsBar = ({ authUser, owner, id }) => {
+  return (
+    <div className='actions--bar'>
+      <div className='bounds'>
+        <div className='grid-100'>
+          {authUser === owner && (
+            <span>
+              <Link className='button' to={`/courses/${id}/update`}>
+                Update Course
+              </Link>
+              <Link className='button' to='/'>
+                Delete Course
+              </Link>
+            </span>
+          )}
+          <Link className='button button-secondary' to='/'>
+            Return to List
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Body = ({ title, description, firstName, lastName }) => {
   return (
