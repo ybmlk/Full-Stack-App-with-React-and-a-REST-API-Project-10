@@ -207,7 +207,7 @@ body {
 
 /* line 13, ../sass/global.sass */
 .header {
-  background: #57496e;
+  background: #4267B2;
   padding: 20px 0;
   margin-bottom: 30px;
 }
@@ -321,7 +321,7 @@ p {
 }
 /* line 81, ../sass/global.sass */
 .grid-33 {
-  width: 33.3%;
+  width: 25%;
 }
 /* line 84, ../sass/global.sass */
 .grid-66 {
@@ -381,7 +381,8 @@ p {
 /* line 123, ../sass/global.sass */
 .course--title {
   font-size: 18px;
-  color: #fff;
+  color: #29303b;
+  margin-bottom: 10px;
 }
 /* line 126, ../sass/global.sass */
 .course--link {
@@ -394,6 +395,7 @@ p {
 .course--add--module {
   background: #eee;
   text-align: center;
+  height: 250px;
 }
 /* line 137, ../sass/global.sass */
 .course--add--module:hover .course--add--title {
@@ -687,7 +689,7 @@ input:focus {
 /* line 507, ../sass/global.sass */
 .button {
   cursor: pointer;
-  background: #7c689b;
+  background: #4267B2;
   color: #fff;
   font-family: 'Work Sans', sans-serif;
   font-size: 18px;
@@ -710,14 +712,14 @@ input:focus {
 }
 /* line 522, ../sass/global.sass */
 .button:not(.button-secondary):hover {
-  background: #63537d;
+  background: #365899;
 }
 
 /* line 525, ../sass/global.sass */
 .button-secondary {
-  color: #7c689b;
+  color: #4267B2;
   background: none;
-  box-shadow: 0 0 0 2px #7c689b inset;
+  box-shadow: 0 0 0 2px #4267B2 inset;
   -webkit-transition: box-shadow 0.2s, color 0.2s;
   -moz-transition: box-shadow 0.2s, color 0.2s;
   -ms-transition: box-shadow 0.2s, color 0.2s;
@@ -726,8 +728,8 @@ input:focus {
 }
 /* line 530, ../sass/global.sass */
 .button-secondary:hover {
-  color: #63537d;
-  box-shadow: 0 0 0 2px #63537d inset;
+  color: #365899;
+  box-shadow: 0 0 0 2px  inset;
 }
 
 /* adds additional padding to the bottom of an element */
@@ -759,4 +761,47 @@ input:focus {
 /* reduce bottom margin on the course description textarea element */
 .course--description textarea {
   margin-bottom: 20px;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 150px 100px;
+  grid-template-areas: 'image' 'text';
+
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.9);
+  transition: 0.5s ease;
+  cursor: pointer;
+}
+
+.card-image {
+  grid-area: image;
+  overflow: hidden;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.card-image img {
+  box-sizing: border-box;
+  object-fit: cover;
+  width: 100%;
+  overflow: hidden;
+  align-items: center;
+}
+
+.card-text {
+  margin: 15px;
+}
+
+.owner {
+  color: #726a6a;
+  font-style: italic;
+}
+
+.card:hover {
+  transform: scale(1.07);
+  box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.9);
 }
