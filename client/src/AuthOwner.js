@@ -23,9 +23,8 @@ class AuthOwner extends Component {
         }
       })
       .catch(err => {
-        // ! Add error page
         console.log(err);
-        history.push('/');
+        history.push('/error');
       });
   }
   render() {

@@ -33,9 +33,8 @@ class CourseDetail extends Component {
         }
       })
       .catch(err => {
-        // ! Add error page
         console.log(err);
-        this.props.history.push('/');
+        this.props.history.push('/error');
       });
   }
 

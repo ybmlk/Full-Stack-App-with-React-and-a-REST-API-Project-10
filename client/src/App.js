@@ -13,6 +13,7 @@ import UserSignOut from './components/UserSignOut';
 import withContext from './Context';
 import PrivateRoute from './PrivateRoute';
 import Forbidden from './components/error/Forbidden';
+import UnhandledError from './components/error/UnhandledError';
 import NotFound from './components/error/NotFound';
 
 // Connect componets to context
@@ -38,6 +39,7 @@ const App = () => (
         <Route path='/signup' component={UserSignUpWithContext} />
         <Route path='/signout' component={UserSignOutWithContext} />
         <Route path='/forbidden' component={Forbidden} />
+        <Route path='/error' component={UnhandledError} />
         <Route path='/notfound' component={NotFound} />
         <Route component={NotFound} />
       </Switch>
