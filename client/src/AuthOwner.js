@@ -43,9 +43,10 @@ class AuthOwner extends Component {
             if (authUser === owner) {
               return <Component {...props} />;
             } else {
-              // ! Add Forbidden page
-              alert('You can only update your own courses!');
-              return <Redirect to={`/courses/${id}`} />;
+              return <Redirect to={{
+                    pathname: '/forbidden',
+                    state: { fromForbidden: props.location },
+                  }} />;
             }
           }
         }}

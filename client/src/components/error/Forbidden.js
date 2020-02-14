@@ -1,0 +1,15 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+const Forbidden = ({ location }) => {
+  const back = location.state.fromForbidden.pathname.replace('/update', '');
+  return (
+    <div className='bounds'>
+      <h1>Forbidden</h1>
+      <p>Sorry! You don't have permission to access this route</p>
+      <Link to={back}> ← Go Back</Link>
+    </div>
+  );
+};
+
+export default Forbidden;
