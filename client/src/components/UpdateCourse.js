@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class UpdateCourse extends Component {
   constructor({ context, match }) {
@@ -24,7 +25,7 @@ class UpdateCourse extends Component {
   };
 
   componentDidMount() {
-    const id = this.match.params.id;
+    const { id } = this.match.params;
     this.data
       .getCourse(id)
       .then(async res => {
@@ -54,13 +55,12 @@ class UpdateCourse extends Component {
 
   submit = e => {
     e.preventDefault();
-    const id = this.match.params.id;
-    const course = this.state.course;
-    const username = this.authUser.emailAddress;
-    const password = this.authUser.password;
+    const { id } = this.match.params;
+    const { course } = this.state;
+    const { emailAddress, password } = this.authUser;
 
     this.data
-      .updateCourse(id, course, username, password)
+      .updateCourse(id, course, emailAddress, password)
       .then(async res => {
         if (res.status === 204) {
           this.props.history.push(`/courses/${id}`);
@@ -78,12 +78,8 @@ class UpdateCourse extends Component {
       });
   };
 
-  cancel = e => {
-    e.preventDefault();
-    this.props.history.push('/');
-  };
-
   render() {
+    const { id } = this.match.params;
     return (
       <div>
         <div className='bounds course--detail'>
@@ -93,7 +89,7 @@ class UpdateCourse extends Component {
             <form onSubmit={this.submit}>
               <Body {...this.state.course} {...this.state.user} change={this.change} />
               <SideBar {...this.state.course} change={this.change} />
-              <Bottom cancel={this.cancel} />
+              <Bottom id={id} />
             </form>
           </div>
         </div>
@@ -170,14 +166,14 @@ const SideBar = ({ estimatedTime, materialsNeeded, change }) => (
   </div>
 );
 
-const Bottom = ({ cancel }) => (
+const Bottom = ({ id }) => (
   <div className='grid-100 pad-bottom'>
     <button className='button' type='submit'>
       Update Course
     </button>
-    <button className='button button-secondary' onClick={cancel}>
+    <Link className='button button-secondary' to={`/courses/${id}`}>
       Cancel
-    </button>
+    </Link>
   </div>
 );
 

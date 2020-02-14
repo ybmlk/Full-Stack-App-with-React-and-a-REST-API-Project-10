@@ -686,6 +686,7 @@ input:focus {
 
 /* line 507, ../sass/global.sass */
 .button {
+  cursor: pointer;
   background: #7c689b;
   color: #fff;
   font-family: 'Work Sans', sans-serif;

@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Courses from './components/Courses';
 import CreateCourse from './components/CreateCourse';
 import UpdateCourse from './components/UpdateCourse';
+import DeleteCourse from './components/DeleteCourse';
 import CourseDetail from './components/CourseDetail';
 import UserSignIn from './components/UserSignIn';
 import UserSignUp from './components/UserSignUp';
@@ -21,6 +22,7 @@ const HeaderWithContext = withContext(Header);
 const CoursesWithContext = withContext(Courses);
 const CreateCourseWithContext = withContext(CreateCourse);
 const UpdateCourseWithContext = withContext(UpdateCourse);
+const DeleteCourseWithContext = withContext(DeleteCourse);
 const CourseDetailWithContext = withContext(CourseDetail);
 const UserSignInWithContext = withContext(UserSignIn);
 const UserSignUpWithContext = withContext(UserSignUp);
@@ -34,6 +36,7 @@ const App = () => (
         <Route exact path='/' component={CoursesWithContext} />
         <PrivateRoute path='/courses/create' component={CreateCourseWithContext} />
         <PrivateRoute path='/courses/:id/update' component={UpdateCourseWithContext} />
+        <PrivateRoute path='/courses/:id/delete' component={DeleteCourseWithContext} />
         <Route path='/courses/:id' component={CourseDetailWithContext} />
         <Route path='/signin' component={UserSignInWithContext} />
         <Route path='/signup' component={UserSignUpWithContext} />

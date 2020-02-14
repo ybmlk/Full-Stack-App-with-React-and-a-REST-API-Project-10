@@ -58,6 +58,11 @@ class Data {
     const response = await this.api(`/courses/${id}`, 'PUT', course, true, { username, password });
     return response;
   }
+
+  async deleteCourse(id, username, password) {
+    const response = await this.api(`/courses/${id}`, 'DELETE', null, true, { username, password });
+    return response;
+  }
 }
 
 export default Data;

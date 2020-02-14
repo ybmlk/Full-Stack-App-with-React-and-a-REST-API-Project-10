@@ -33,11 +33,6 @@ class UserSignIn extends Component {
       .catch(err => console.log(err));
   };
 
-  cancel = e => {
-    e.preventDefault();
-    this.props.history.push('/');
-  };
-
   render() {
     const { emailAddress, password, errors } = this.state;
     const { context } = this.props;
@@ -76,9 +71,9 @@ class UserSignIn extends Component {
                 <button className='button' type='submit'>
                   Sign In
                 </button>
-                <button className='button button-secondary' onClick={this.cancel}>
+                <Link className='button button-secondary' to='/'>
                   Cancel
-                </button>
+                </Link>
               </div>
             </form>
           </div>

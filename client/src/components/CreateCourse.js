@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class CreateCourse extends Component {
   constructor({ context }) {
@@ -63,11 +64,6 @@ class CreateCourse extends Component {
       });
   };
 
-  cancel = e => {
-    e.preventDefault();
-    this.props.history.push('/');
-  };
-
   render() {
     return (
       <div>
@@ -78,7 +74,7 @@ class CreateCourse extends Component {
             <form onSubmit={this.submit}>
               <Body {...this.state.course} {...this.state.user} change={this.change} />
               <SideBar {...this.state.course} change={this.change} />
-              <Bottom cancel={this.cancel} />
+              <Bottom  />
             </form>
           </div>
         </div>
@@ -155,14 +151,14 @@ const SideBar = ({ estimatedTime, materialsNeeded, change }) => (
   </div>
 );
 
-const Bottom = ({ cancel }) => (
+const Bottom = () => (
   <div className='grid-100 pad-bottom'>
     <button className='button' type='submit'>
       Create Course
     </button>
-    <button className='button button-secondary' onClick={cancel}>
+    <Link className='button button-secondary' to='/'>
       Cancel
-    </button>
+    </Link>
   </div>
 );
 

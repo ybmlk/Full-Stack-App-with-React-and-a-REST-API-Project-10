@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Forbidden = ({ location }) => {
-  const back = location.state.fromForbidden.pathname.replace('/update', '');
+  const back = location.state.fromForbidden.pathname.replace('/update', '').replace('/delete', '');
   return (
     <div className='bounds'>
       <h1>Forbidden</h1>
