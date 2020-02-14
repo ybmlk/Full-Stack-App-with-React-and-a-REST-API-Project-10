@@ -63,25 +63,29 @@ class CourseDetail extends Component {
 
 const ActionsBar = ({ authUser, owner, id }) => {
   return (
-    <div className='actions--bar'>
-      <div className='bounds'>
-        <div className='grid-100'>
-          {authUser === owner && (
-            <span>
-              <Link className='button' to={`/courses/${id}/update`}>
-                Update Course
+    <React.Fragment>
+      {owner !== undefined && (
+        <div className='actions--bar'>
+          <div className='bounds'>
+            <div className='grid-100'>
+              {authUser === owner && (
+                <span>
+                  <Link className='button' to={`/courses/${id}/update`}>
+                    Update Course
+                  </Link>
+                  <Link className='button' to='/'>
+                    Delete Course
+                  </Link>
+                </span>
+              )}
+              <Link className='button button-secondary' to='/'>
+                Return to List
               </Link>
-              <Link className='button' to='/'>
-                Delete Course
-              </Link>
-            </span>
-          )}
-          <Link className='button button-secondary' to='/'>
-            Return to List
-          </Link>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </React.Fragment>
   );
 };
 

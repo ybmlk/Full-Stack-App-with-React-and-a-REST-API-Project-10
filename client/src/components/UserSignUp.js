@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 class UserSignUp extends Component {
   constructor({ context }) {
@@ -31,6 +31,7 @@ class UserSignUp extends Component {
   submit = e => {
     e.preventDefault();
     const { user } = this.state;
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
     const { emailAddress, password } = this.state.user;
 
     this.data
@@ -38,7 +39,7 @@ class UserSignUp extends Component {
       .then(async res => {
         if (res.status === 201) {
           this.actions.signIn(emailAddress, password).then(data => {
-            this.props.history.push('/');
+            this.props.history.push(from);
             console.log(`SUCCESS! ${data.user.firstName} ${data.user.lastName} is now signed in!`);
           });
         } else {
@@ -143,7 +144,7 @@ class UserSignUp extends Component {
           </div>
           <p>&nbsp;</p>
           <p>
-            Already have a user account? <a href='sign-in.html'>Click here</a> to sign in!
+            Already have a user account? <Link to='/signin'>Click here</Link> to sign in!
           </p>
         </div>
       </div>

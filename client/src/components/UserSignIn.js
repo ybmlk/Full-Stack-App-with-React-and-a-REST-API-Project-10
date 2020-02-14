@@ -17,13 +17,14 @@ class UserSignIn extends Component {
   submit = e => {
     e.preventDefault();
     const { context } = this.props;
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
     const { emailAddress, password } = this.state;
     context.actions
       .signIn(emailAddress, password)
       .then(data => {
         const { user } = data;
         if (user) {
-          this.props.history.push('/');
+          this.props.history.push(from);
           console.log(`SUCCESS! ${user.firstName} ${user.lastName} is now signed in!`);
         } else {
           this.setState(() => ({ errors: [data.errors.message] }));
