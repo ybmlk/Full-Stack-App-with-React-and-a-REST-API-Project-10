@@ -1,10 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import image1 from '../../src/img/img1.png';
+import image2 from '../../src/img/img2.jpg';
+import image3 from '../../src/img/img3.png';
+import image4 from '../../src/img/img4.png';
 
 class Courses extends Component {
   state = {
     courses: [],
+    images: [image1, image2, image3, image4],
   };
 
   componentDidMount() {
@@ -19,7 +23,7 @@ class Courses extends Component {
     return (
       <div className='bounds'>
         {this.state.courses.map(course => (
-          <Card key={course.id} {...course} />
+          <Card key={course.id} {...course} images={this.state.images} />
         ))}
 
         {context.authenticatedUser && (
@@ -46,14 +50,16 @@ class Courses extends Component {
   }
 }
 
-const Card = ({ ...course }) => {
+const Card = ({ images, ...course }) => {
+  const randnum = Math.floor(Math.random() * 4);
+  const newimg = images[randnum];
   return (
     <div className='grid-33'>
       <Link to={`/courses/${course.id}`}>
         <Fragment>
           <div className='card'>
             <div className='card-image'>
-              <img src={image1} alt='img' />
+              <img src={newimg} alt='img' />
             </div>
             <div className='card-text'>
               <h3 className='course--title'>{course.title}</h3>

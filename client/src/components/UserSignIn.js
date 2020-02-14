@@ -67,7 +67,7 @@ class UserSignIn extends Component {
                   onChange={this.change}
                 />
               </div>
-              <div className='grid-100 pad-bottom'>
+              <div className='pad-bottom grid-100-padding'>
                 <button className='button' type='submit'>
                   Sign In
                 </button>

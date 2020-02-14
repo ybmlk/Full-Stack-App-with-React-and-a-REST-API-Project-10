@@ -207,7 +207,7 @@ body {
 
 /* line 13, ../sass/global.sass */
 .header {
-  background: #4267B2;
+  background: #4267b2;
   padding: 20px 0;
   margin-bottom: 30px;
 }
@@ -283,7 +283,7 @@ h1 {
 
 /* line 61, ../sass/global.sass */
 a {
-  color: #7c689b;
+  color: #4267B2;
   cursor: pointer;
   text-decoration: none;
   -webkit-transition: color 0.2s;
@@ -322,6 +322,7 @@ p {
 /* line 81, ../sass/global.sass */
 .grid-33 {
   width: 25%;
+  margin-bottom: 50px;
 }
 /* line 84, ../sass/global.sass */
 .grid-66 {
@@ -689,7 +690,7 @@ input:focus {
 /* line 507, ../sass/global.sass */
 .button {
   cursor: pointer;
-  background: #4267B2;
+  background: #4267b2;
   color: #fff;
   font-family: 'Work Sans', sans-serif;
   font-size: 18px;
@@ -717,9 +718,9 @@ input:focus {
 
 /* line 525, ../sass/global.sass */
 .button-secondary {
-  color: #4267B2;
+  color: #4267b2;
   background: none;
-  box-shadow: 0 0 0 2px #4267B2 inset;
+  box-shadow: 0 0 0 2px #4267b2 inset;
   -webkit-transition: box-shadow 0.2s, color 0.2s;
   -moz-transition: box-shadow 0.2s, color 0.2s;
   -ms-transition: box-shadow 0.2s, color 0.2s;
@@ -729,7 +730,7 @@ input:focus {
 /* line 530, ../sass/global.sass */
 .button-secondary:hover {
   color: #365899;
-  box-shadow: 0 0 0 2px  inset;
+  box-shadow: 0 0 0 2px inset;
 }
 
 /* adds additional padding to the bottom of an element */
@@ -804,4 +805,8 @@ input:focus {
 .card:hover {
   transform: scale(1.07);
   box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.9);
+}
+
+.grid-100-padding {
+  padding: 15 15px;
 }
