@@ -35,9 +35,7 @@ class UpdateCourse extends Component {
             user: course[0].user,
           }));
         } else {
-          // ! Add 404 page
-          alert('404 Page Not found');
-          this.props.history.push('/');
+          this.props.history.push('/notfound');
         }
       })
       .catch(err => {
@@ -174,15 +172,12 @@ const SideBar = ({ estimatedTime, materialsNeeded, change }) => (
   </div>
 );
 
-const Bottom = ({cancel}) => (
+const Bottom = ({ cancel }) => (
   <div className='grid-100 pad-bottom'>
     <button className='button' type='submit'>
       Update Course
     </button>
-    <button
-      className='button button-secondary'
-      onClick={cancel}
-    >
+    <button className='button button-secondary' onClick={cancel}>
       Cancel
     </button>
   </div>

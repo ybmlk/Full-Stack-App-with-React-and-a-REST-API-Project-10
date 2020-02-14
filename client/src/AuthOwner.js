@@ -19,9 +19,7 @@ class AuthOwner extends Component {
             user: course[0].user,
           }));
         } else {
-          // ! Add 404 page
-          alert('404 Page Not found');
-          history.push('/');
+          history.push('/notfound');
         }
       })
       .catch(err => {

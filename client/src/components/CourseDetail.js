@@ -29,9 +29,7 @@ class CourseDetail extends Component {
             }));
           }
         } else {
-          // ! Add 404 page
-          alert('404 Page Not found');
-          this.props.history.push('/');
+          this.props.history.push('/notfound');
         }
       })
       .catch(err => {
