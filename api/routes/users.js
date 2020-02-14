@@ -23,7 +23,7 @@ const authenticateUser = async (req, res, next) => {
   let message = null;
   const credentials = auth(req);
   // If email and password is provided...
-  if (credentials) {
+  if (credentials.name && credentials.pass) {
     const user = await User.findOne({
       where: { emailAddress: credentials.name },
     });
@@ -35,18 +35,18 @@ const authenticateUser = async (req, res, next) => {
         console.log(`Authentication successful for email: ${user.emailAddress}`);
         req.currentUser = user;
       } else {
-        message = `Authentication failure for email: ${user.emailAddress}`;
+        message = `Invalid email and/or password`;
       }
     } else {
-      message = `User not found for email: ${credentials.name}`;
+      message = `Invalid email and/or password`;
     }
   } else {
-    message = 'Auth header not found';
+    message = 'Please enter your email and/or password';
   }
 
   if (message) {
     console.warn(message);
-    res.status(401).json({ message: 'Access Denied' });
+    res.status(401).json({ message });
   } else {
     next();
   }
@@ -70,22 +70,25 @@ router.post(
       .exists()
       .withMessage('"firstName" is required')
       .notEmpty()
-      .withMessage('Please enter a "firstName"'),
+      .withMessage('Please enter your First Name'),
     check('lastName')
       .exists()
       .withMessage('"lastName" is required')
       .notEmpty()
-      .withMessage('Please enter a "lastName"'),
+      .withMessage('Please enter your Last Name'),
     check('emailAddress')
       .exists()
       .withMessage('"emailAddress" is required')
       .isEmail()
-      .withMessage('Please Provide a valid "emailAddress"'),
+      .withMessage('Please Provide a valid Email Address'),
     check('password')
       .exists()
       .withMessage('"password" is required')
       .isLength({ min: 8, max: 20 })
-      .withMessage('"password" should be between 8 - 20 characters'),
+      .withMessage('Password length should be between 8 - 20 characters'),
+    check('confirmPassword', 'Passwords do not match').custom(
+      (value, { req }) => value === req.body.password
+    ),
   ],
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);

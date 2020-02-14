@@ -45,19 +45,13 @@ class CourseDetail extends Component {
     const { context } = this.props;
     const owner = this.state.user.id;
     const authUser = context.authenticatedUser ? context.authenticatedUser.id : null;
-    let actionBar = null;
 
-    if (owner !== undefined) {
-      if (authUser === owner) {
-        actionBar = <ActionsBar id={this.state.course.id} />;
-      }
-    }
     return (
       <div>
         <div className='actions--bar'>
           <div className='bounds'>
             <div className='grid-100'>
-              {actionBar}
+              {authUser === owner && <ActionsBar id={this.state.course.id} />}
               <Link className='button button-secondary' to='/'>
                 Return to List
               </Link>

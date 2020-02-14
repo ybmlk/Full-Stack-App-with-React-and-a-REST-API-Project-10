@@ -35,21 +35,15 @@ class Data {
 
   async createUser(user) {
     const response = await this.api('/users', 'POST', user);
-    if (response.status === 201) {
-      return [];
-    } else if (response.status === 400) {
-      return response.json().then(data => data.errors);
-    } else {
-      throw new Error();
-    }
+    return response;
   }
 
   async getUser(username, password) {
     const response = await this.api('/users', 'GET', null, true, { username, password });
     if (response.status === 200) {
-      return response.json().then(data => data);
+      return response.json().then(data => ({ user: data }));
     } else if (response.status === 401) {
-      return null;
+      return response.json().then(data => ({ errors: data }));
     } else {
       throw new Error();
     }
@@ -57,15 +51,6 @@ class Data {
 
   async createCourse(course, username, password) {
     const response = await this.api('/courses', 'POST', course, true, { username, password });
-    /* if (response.status === 201) {
-      return [];
-    } else if (response.status === 400) {
-      return response.json().then(data => data.errors);
-    } else if (response.status === 401) {
-      return null;
-    } else {
-      throw new Error();
-    } */
     return response;
   }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 class UserSignIn extends Component {
   state = {
@@ -20,12 +20,13 @@ class UserSignIn extends Component {
     const { emailAddress, password } = this.state;
     context.actions
       .signIn(emailAddress, password)
-      .then(user => {
+      .then(data => {
+        const { user } = data;
         if (user) {
           this.props.history.push('/');
           console.log(`SUCCESS! ${user.firstName} ${user.lastName} is now signed in!`);
         } else {
-          this.setState(() => ({ errors: ['Sign-in was unsuccessful'] }));
+          this.setState(() => ({ errors: [data.errors.message] }));
         }
       })
       .catch(err => console.log(err));
@@ -38,6 +39,11 @@ class UserSignIn extends Component {
 
   render() {
     const { emailAddress, password, errors } = this.state;
+    const { context } = this.props;
+    // If there is an authenticated user '/signin' will redirect to '/'
+    if (context.authenticatedUser) {
+      return <Redirect to='/' />;
+    }
     return (
       <div className='bounds'>
         <div className='grid-33 centered signin'>
@@ -91,7 +97,6 @@ const ErrorsDisplay = ({ errors }) => {
   if (errors.length) {
     return (
       <div>
-        <h2 className='validation--errors--label'>Validation errors</h2>
         <div className='validation-errors'>
           <ul>
             {errors.map((error, i) => (

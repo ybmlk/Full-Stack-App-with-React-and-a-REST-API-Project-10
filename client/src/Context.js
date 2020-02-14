@@ -11,14 +11,15 @@ class Provider extends Component {
   };
 
   signIn = async (username, password) => {
-    const user = await this.data.getUser(username, password);
+    const data = await this.data.getUser(username, password);
+    const { user } = data;
     if (user) {
-      user.password = password
+      user.password = password;
       this.setState(() => ({ authenticatedUser: user }));
       // save cookie
       Cookies.set('authenticatedUser', JSON.stringify(user), { expires: 2 });
     }
-    return user;
+    return data;
   };
 
   signOut = () => {
@@ -33,7 +34,7 @@ class Provider extends Component {
       data: this.data,
       actions: {
         signIn: this.signIn,
-        signOut: this.signOut
+        signOut: this.signOut,
       },
     };
 
