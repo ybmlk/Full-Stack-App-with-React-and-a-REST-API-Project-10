@@ -1,7 +1,5 @@
 # Full Stack Course Catalog App with React and a REST API
 
----
-
 ### Table of Contents
 
 - [Description](#Description)
@@ -31,14 +29,14 @@ This application is a full stack program with React frontend and Node.JS backend
 1. Download Project Files
 
 2. Install project dependencies
-    > Navigate to /api directory and run `npm install`
+    - Navigate to /api directory and run `npm install`
     
-    > Navigate to /client directory and run `npm install`
+    - Navigate to /client directory and run `npm install`
   
 3. Run Project
-    > Navigate to the root directory and run `npm start`
+    - Navigate to the root directory and run `npm start`
 
-4. The project is live at `http://localhost:5000/` 
+4. The project is live at `http://localhost:3000/` 
 
 ## License
 
