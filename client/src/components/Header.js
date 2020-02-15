@@ -8,7 +8,7 @@ const Header = ({ context }) => {
       <div className='header'>
         <div className='bounds'>
           <Link to='/'>
-            <h1 className='header--logo'>Courses</h1>
+            <h1 className='header--logo'>Course Catalog</h1>
           </Link>
           <nav>
             {authUser ? (

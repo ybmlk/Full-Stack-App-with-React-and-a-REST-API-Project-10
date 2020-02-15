@@ -227,6 +227,9 @@ body {
 .header--logo a:hover {
   color: #fff;
 }
+.header--logo:hover {
+  color:#eaeaea;
+}
 /* line 27, ../sass/global.sass */
 .header--logo .selected {
   color: #fff;
