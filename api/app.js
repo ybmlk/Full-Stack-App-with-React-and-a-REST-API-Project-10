@@ -4,8 +4,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const { sequelize } = require('./models');
-/* No need to Import Cors library because
-"proxy": "http://localhost:5000" is added in the client's 'package.json' file */
+const cors = require('cors');
 
 // import routes
 const indexRouter = require('./routes');
@@ -17,6 +16,9 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'tr
 
 // create the Express app
 const app = express();
+
+// Enable all CORS Requests
+app.use(cors());
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
