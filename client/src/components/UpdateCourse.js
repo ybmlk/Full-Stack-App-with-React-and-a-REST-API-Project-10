@@ -6,6 +6,7 @@ class UpdateCourse extends Component {
     super();
     this.context = context;
     this.match = match;
+    // 'data' is a helper class with useful methods
     this.data = this.context.data;
     this.authUser = this.context.authenticatedUser;
   }
@@ -27,13 +28,14 @@ class UpdateCourse extends Component {
   componentDidMount() {
     const { id } = this.match.params;
     this.data
+      // Retrieves a course with a given 'Id'
       .getCourse(id)
       .then(async res => {
         if (res.status === 200) {
           const course = await res.json();
           this.setState(() => ({
-            course: course[0],
-            user: course[0].user,
+            course: course,
+            user: course.user,
           }));
         } else {
           this.props.history.push('/notfound');
@@ -45,6 +47,7 @@ class UpdateCourse extends Component {
       });
   }
 
+  // Is called when there is change in input, and updates the state with the input data
   change = e => {
     const name = e.target.name;
     const value = e.target.value;
@@ -60,13 +63,15 @@ class UpdateCourse extends Component {
     const { emailAddress, password } = this.authUser;
 
     this.data
+      /* Passes the course's Id, the currently authenticated user's (who is also the owner)
+      email and password as an argument to update the course */
       .updateCourse(id, course, emailAddress, password)
       .then(async res => {
         if (res.status === 204) {
           this.props.history.push(`/courses/${id}`);
         } else {
           const data = await res.json();
-          // error message for invalid inputs
+          // Stores error messages for invalid inputs
           this.setState(() => ({
             errors: data.errors,
           }));

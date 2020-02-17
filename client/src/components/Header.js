@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Header = ({ context }) => {
+  // The currently authenticated user's info is stored in 'authenticatedUser'
   const authUser = context.authenticatedUser;
   return (
     <React.Fragment>
@@ -11,9 +12,13 @@ const Header = ({ context }) => {
             <h1 className='header--logo'>Course Catalog</h1>
           </Link>
           <nav>
+            {/* If there's authenticated user it'll show the name and 'Sign Out' 
+            else it'll show 'Sign Up' and 'Sign In; */}
             {authUser ? (
               <React.Fragment>
-                <span>Welcome, {authUser.firstName} {authUser.lastName}!</span>
+                <span>
+                  Welcome, {authUser.firstName} {authUser.lastName}!
+                </span>
                 <Link className='signout' to='/signout'>
                   Sign Out
                 </Link>

@@ -83,7 +83,7 @@ router.get(
         },
       ],
     });
-    course.length ? res.json(course) : res.status(404).json({ message: 'Course Not Found!' });
+    course.length ? res.json(course[0]) : res.status(404).json({ message: 'Course Not Found!' });
   })
 );
 

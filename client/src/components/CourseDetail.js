@@ -12,16 +12,18 @@ class CourseDetail extends Component {
     const { context, match } = this.props;
     const { data } = context;
     const id = match.params.id;
-
+    // Retrieves a courses with a given 'id'
     data
       .getCourse(id)
       .then(async res => {
+        // If the course exists it updates the state with the corse details and owner
         if (res.status === 200) {
           const course = await res.json();
           this.setState(() => ({
-            course: course[0],
-            user: course[0].user,
+            course: course,
+            user: course.user,
           }));
+          // else it renders '404' page
         } else {
           this.props.history.push('/notfound');
         }
@@ -34,7 +36,9 @@ class CourseDetail extends Component {
 
   render() {
     const { context } = this.props;
+    // Stores the authenticated User's Id
     const authUser = context.authenticatedUser ? context.authenticatedUser.id : null;
+    // Stores the course owner's Id
     const owner = this.state.user.id;
 
     return (
@@ -56,6 +60,8 @@ const ActionsBar = ({ authUser, owner, id }) => {
         <div className='actions--bar'>
           <div className='bounds'>
             <div className='grid-100'>
+              {/* If the authenticated User is the owner of the course
+              it will allow deleting and updating the course */}
               {authUser === owner && (
                 <span>
                   <Link className='button' to={`/courses/${id}/update`}>

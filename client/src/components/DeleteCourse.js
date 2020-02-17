@@ -16,13 +16,14 @@ class DeleteCourse extends Component {
 
   componentDidMount() {
     const { id } = this.match.params;
+    // Retrieves a courses with a given 'id'
     this.data
       .getCourse(id)
       .then(async res => {
         if (res.status === 200) {
           const course = await res.json();
           this.setState(() => ({
-            course: course[0],
+            course: course,
           }));
         } else {
           this.props.history.push('/notfound');
@@ -38,6 +39,8 @@ class DeleteCourse extends Component {
     const { id } = this.match.params;
     const { emailAddress, password } = this.authUser;
     this.data
+      /* Passes the course's Id, the currently authenticated user's (who is also the owner)
+      username and password as an argument to delete the course */
       .deleteCourse(id, emailAddress, password)
       .then(res => {
         if (res.status === 204) {

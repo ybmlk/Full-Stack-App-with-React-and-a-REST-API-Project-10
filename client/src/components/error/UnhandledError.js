@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Renders when there is an internal (server) error
 const UnhandledError = () => (
   <div className='bounds'>
     <h1>Error!</h1>

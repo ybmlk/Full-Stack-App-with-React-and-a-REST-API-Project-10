@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// Renders when the requested page doesn't exist
 const NotFound = () => (
   <div className='bounds'>
     <h1>404! Page Not Found</h1>

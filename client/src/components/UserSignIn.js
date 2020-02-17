@@ -8,15 +8,20 @@ class UserSignIn extends Component {
     errors: [],
   };
 
+  // Is called when there is change in input, and updates the state with the input data
   change = event => {
     const name = event.target.name;
     const value = event.target.value;
     this.setState(() => ({ [name]: value }));
   };
 
+  // Is called when the form is submitted
   submit = e => {
     e.preventDefault();
     const { context } = this.props;
+    /* 'this.props.location.state' stores the path the user tried to access without authentication
+    So, when the user is eventually authenticated  it will be redirected to that path instead of the home page.
+    But, if there's no such path the user once authenticated will be redirected to the home page */
     const { from } = this.props.location.state || { from: { pathname: '/' } };
     const { emailAddress, password } = this.state;
     context.actions
@@ -36,7 +41,7 @@ class UserSignIn extends Component {
   render() {
     const { emailAddress, password, errors } = this.state;
     const { context } = this.props;
-    // If there is an authenticated user '/signin' will redirect to '/'
+    // If there is an authenticated user '/signin' will redirect to '/' (homepage)
     if (context.authenticatedUser) {
       return <Redirect to='/' />;
     }

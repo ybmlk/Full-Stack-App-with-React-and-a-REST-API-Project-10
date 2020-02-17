@@ -20,6 +20,8 @@ class UserSignUp extends Component {
     errors: [],
   };
 
+  /* Is called when there is a change in input data. stores the 
+  input data in the corresponding user property state */
   change = e => {
     const name = e.target.name;
     const value = e.target.value;
@@ -31,12 +33,16 @@ class UserSignUp extends Component {
   submit = e => {
     e.preventDefault();
     const { user } = this.state;
+    // Path the user attempted to access before authentication or Homepage
     const { from } = this.props.location.state || { from: { pathname: '/' } };
     const { emailAddress, password } = this.state.user;
 
     this.data
+      /* Passes the currently authenticated user's username and passwrd 
+      as an argument to create a new user */
       .createUser(user)
       .then(async res => {
+        // If the user is created...
         if (res.status === 201) {
           this.actions.signIn(emailAddress, password).then(data => {
             this.props.history.push(from);
@@ -44,7 +50,7 @@ class UserSignUp extends Component {
           });
         } else {
           const data = await res.json();
-          // error message for invalid inputs
+          // Stores error message for invalid inputs
           this.setState(() => ({
             errors: data.errors,
           }));

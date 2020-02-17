@@ -5,7 +5,9 @@ class CreateCourse extends Component {
   constructor({ context }) {
     super();
     this.context = context;
+    // 'data' is a helper class with useful methods
     this.data = this.context.data;
+    // The currently authenticated user's info is stored in 'authenticatedUser'
     this.authUser = this.context.authenticatedUser;
   }
 
@@ -29,6 +31,8 @@ class CreateCourse extends Component {
     }));
   }
 
+  /* Is called when there is a change in input data.
+  stores the input data in the corresponding course property */
   change = e => {
     const name = e.target.name;
     const value = e.target.value;
@@ -37,6 +41,7 @@ class CreateCourse extends Component {
     this.setState(() => ({ course }));
   };
 
+  // Is called when the form is submited
   submit = e => {
     e.preventDefault();
     const course = this.state.course;
@@ -44,15 +49,20 @@ class CreateCourse extends Component {
     const password = this.authUser.password;
 
     this.data
+      /* Passes the course's data, the currently authenticated user's
+      username and password as an argument to create a new course */
       .createCourse(course, username, password)
       .then(async res => {
+        // If the course is created...
         if (res.status === 201) {
           const course = await res.json();
+          // Gets the newly created course's Id
           const { courseId } = course;
+          // ... and redirects to read mode
           this.props.history.push(`/courses/${courseId}`);
         } else {
           const data = await res.json();
-          // error message for invalid inputs
+          // Error message for invalid inputs is stored in 'errors'
           this.setState(() => ({
             errors: data.errors,
           }));
@@ -70,6 +80,7 @@ class CreateCourse extends Component {
         <div className='bounds course--detail'>
           <h1>Create Course</h1>
           <div>
+            {/* displays errors due to invalid input */}
             <ErrorsDisplay errors={this.state.errors} />
             <form onSubmit={this.submit}>
               <Body {...this.state.course} {...this.state.user} change={this.change} />
