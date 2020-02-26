@@ -1,4 +1,4 @@
-# Full Stack Course Catalog App with React and a REST API
+# Udemy Clone
 
 ### Table of Contents
 
@@ -10,7 +10,7 @@
 
 ## Description
 
-This application is a full stack program with React frontend and Node.JS backend. It allows users to read, create, update and delete courses. The application incorporates user authentication, thus users can only update or delete only cousrses they created.
+This application is a full stack program with React frontend and Node.JS backend. This app is an amateur version of Udemy (an online course platform). It allows users to read, create, update and delete courses. The application incorporates user authentication, thus users can only update or delete only cousrses they created.
 
 ---
 
