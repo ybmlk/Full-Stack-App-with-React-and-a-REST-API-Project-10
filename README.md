@@ -21,8 +21,8 @@ This application is a full stack program with React frontend and Node.JS backend
 - Express / Node.js
 - HTML
 - CSS
-- SQL
-- Sequelize
+- MongoDB
+- Mongoose
 
 ## How To Install
 
