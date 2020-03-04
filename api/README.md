@@ -1,6 +1,4 @@
-# REST API
-
-### Team Treehouse Unit 9 Project
+# REST API With MongoDB Database
 
 ---
 
@@ -14,7 +12,7 @@
 
 ## Description
 
-This application is a backend REST API. It allows users to create courses. It requires user authentication before updating and deleting cousrses.
+This application is a backend REST API with MongoDB database. It allows users to create, read, update and delete courses. It includes user authentication thus users must authenticate before creating, updating or deleting cousrses.
 
 ---
 
@@ -22,8 +20,8 @@ This application is a backend REST API. It allows users to create courses. It re
 
 - Express / Node.js
 - Javascript
-- SQL
-- Sequelize
+- MongoDB
+- Mongoose
 
 ## How To Install
 

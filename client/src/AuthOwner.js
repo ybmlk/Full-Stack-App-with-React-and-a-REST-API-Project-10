@@ -35,9 +35,9 @@ class AuthOwner extends Component {
     // `component: Component` means import `component as Component`
     const { component: Component, id, context, ...rest } = this.props;
     // The owner of the course
-    const owner = this.state.user.id;
+    const owner = this.state.user._id;
     // The authenticated user
-    const authUser = context.authenticatedUser.id;
+    const authUser = context.authenticatedUser._id;
 
     return (
       <Route

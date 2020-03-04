@@ -1,53 +1,30 @@
-'use strict';
-const Sequelize = require('sequelize');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-module.exports = sequelize => {
-  class Course extends Sequelize.Model {}
-  Course.init(
-    {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      title: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: '"title" is required',
-          },
-        },
-      },
-      description: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: '"description" is required',
-          },
-        },
-      },
-      estimatedTime: {
-        type: Sequelize.STRING,
-      },
-      materialsNeeded: {
-        type: Sequelize.STRING,
-      },
+// Create Schema
+const CourseSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
     },
-    { sequelize }
-  );
+    description: {
+      type: String,
+      required: true,
+    },
+    estimatedTime: {
+      type: String,
+    },
+    materialsNeeded: {
+      type: String,
+    },
+    user: {
+      type: Object,
+      ref: 'User',
+      required: true,
+    },
+  },
+  { timestamps: true } // authomatically adds CreatedAt, updatedAt
+);
 
-  // A 'course' can be associated with only one 'user'
-  Course.associate = model => {
-    Course.belongsTo(model.User, {
-      as: 'user',
-      foreignKey: {
-        fieldName: 'userId',
-        allowNull: false,
-      },
-    });
-  };
-
-  return Course;
-};
+module.exports = Course = mongoose.model('course', CourseSchema);

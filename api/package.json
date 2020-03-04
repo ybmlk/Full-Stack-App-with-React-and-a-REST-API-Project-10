@@ -1,28 +1,24 @@
 {
-  "name": "techdegree-fullstackjs-rest-api",
+  "name": "udemy-clone-api-mongodb",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "MongoDB for udemy clone api",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon ./app.js",
-    "seed": "cross-env DB_ENABLE_LOGGING=true node './seed'"
+    "start": "node server.js",
+    "server": "nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "nodemon": "^1.19.4"
-  },
+  "author": "Yonatan Melka",
+  "license": "MIT",
   "dependencies": {
     "basic-auth": "^2.0.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
-    "cross-env": "^5.2.1",
     "express": "^4.17.1",
-    "express-validator": "^6.3.1",
-    "morgan": "^1.9.0",
-    "promise.prototype.finally": "^3.1.2",
-    "sequelize": "^5.21.3",
-    "sqlite3": "^4.1.1"
+    "express-validator": "^6.4.0",
+    "mongoose": "^5.9.3",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }

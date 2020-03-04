@@ -37,13 +37,13 @@ class CourseDetail extends Component {
   render() {
     const { context } = this.props;
     // Stores the authenticated User's Id
-    const authUser = context.authenticatedUser ? context.authenticatedUser.id : null;
+    const authUser = context.authenticatedUser ? context.authenticatedUser._id : null;
     // Stores the course owner's Id
-    const owner = this.state.user.id;
+    const owner = this.state.user._id;
 
     return (
       <div>
-        <ActionsBar authUser={authUser} owner={owner} id={this.state.course.id} />
+        <ActionsBar authUser={authUser} owner={owner} id={this.state.course._id} />
         <div className='bounds course--detail'>
           <Body {...this.state.course} {...this.state.user} />
           <SideBar {...this.state.course} />

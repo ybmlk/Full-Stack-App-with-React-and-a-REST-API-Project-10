@@ -3,10 +3,13 @@ const auth = require('basic-auth');
 const bcryptjs = require('bcryptjs');
 const { check, validationResult } = require('express-validator');
 const router = express.Router();
-const { Course, User } = require('../models');
 
-/* Handler function to wrap each function */
-function asyncHandler(cb) {
+// Import Models
+const Course = require('../models/Course');
+const User = require('../models/User');
+
+/* Handler function to wrap each function with try/cath block */
+const asycnHandler = cb => {
   return async (req, res, next) => {
     try {
       await cb(req, res, next);
@@ -14,17 +17,15 @@ function asyncHandler(cb) {
       res.status(500).send(error);
     }
   };
-}
+};
 
 /* Authentication middleware */
 const authenticateUser = async (req, res, next) => {
   let message = null;
   const credentials = auth(req);
   // If email and password is provided...
-  if (credentials) {
-    const user = await User.findOne({
-      where: { emailAddress: credentials.name },
-    });
+  if (credentials && credentials.name && credentials.pass) {
+    const user = await User.findOne({ emailAddress: credentials.name });
     // If the email provided is found in the database...
     if (user) {
       const authenticated = bcryptjs.compareSync(credentials.pass, user.password);
@@ -33,61 +34,58 @@ const authenticateUser = async (req, res, next) => {
         console.log(`Authentication successful for email: ${user.emailAddress}`);
         req.currentUser = user;
       } else {
-        message = `Authentication failure for email: ${user.emailAddress}`;
+        message = `Invalid email and/or password`;
       }
     } else {
-      message = `User not found for email: ${credentials.name}`;
+      message = `Invalid email and/or password`;
     }
   } else {
-    message = 'Auth header not found';
+    message = 'Please enter your email and/or password';
   }
 
   if (message) {
     console.warn(message);
-    res.status(401).json({ message: 'Access Denied' });
+    res.status(401).json({ message });
   } else {
     next();
   }
 };
 
-/* GET courses list */
+/**
+ * @listens   GET api/courses
+ * @desc      Get All Courses
+ * @access    Public
+ */
 router.get(
   '/',
-  asyncHandler(async (req, res, next) => {
-    const courses = await Course.findAll({
-      attributes: { exclude: ['createdAt', 'updatedAt'] },
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['id', 'firstName', 'lastName', 'emailAddress'],
-        },
-      ],
-    });
-    res.json(courses);
+  asycnHandler(async (req, res) => {
+    Course.find()
+      // Sorts by date in descending order (most recent first)
+      .sort({ updatedAt: -1 })
+      .then(courses => res.json(courses))
+      .catch(err => console.log(err));
   })
 );
 
-/* GET an individual course */
+/**
+ * @listens   GET api/courses/:id
+ * @desc      Get An Individual Course
+ * @access    Public
+ */
 router.get(
   '/:id',
-  asyncHandler(async (req, res) => {
-    const course = await Course.findAll({
-      where: { id: req.params.id },
-      attributes: { exclude: ['createdAt', 'updatedAt'] },
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: ['id', 'firstName', 'lastName', 'emailAddress'],
-        },
-      ],
-    });
-    course.length ? res.json(course[0]) : res.status(404).json({ message: 'Course Not Found!' });
+  asycnHandler(async (req, res) => {
+    Course.findById(req.params.id)
+      .then(course => res.json(course))
+      .catch(() => res.status(404).json({ message: 'Course Not Found!' }));
   })
 );
 
-/* Create courses */
+/**
+ * @listens   Post api/courses
+ * @desc      Create A Course
+ * @access    Private
+ */
 router.post(
   '/',
   authenticateUser,
@@ -103,7 +101,7 @@ router.post(
       .notEmpty()
       .withMessage('Please enter a "description"'),
   ],
-  asyncHandler(async (req, res) => {
+  asycnHandler(async (req, res) => {
     const errors = validationResult(req);
     // If there are validation errors...
     if (!errors.isEmpty()) {
@@ -113,15 +111,22 @@ router.post(
     } else {
       const course = await req.body;
       // the 'userId' for the course comes from currently authenticated user
-      course.userId = req.currentUser.id;
-      const currentCourse = await Course.create(course);
-      res.setHeader('Location', `/api/course/${currentCourse.id}`);
-      res.status(201).json({courseId: currentCourse.id})
+      course.user = req.currentUser;
+      Course.create(req.body).then(course =>
+        res
+          .status(201)
+          .json({ courseId: course._id })
+          .setHeader('Location', `/api/course/${course._id}`)
+      );
     }
   })
 );
 
-/* Update Courses */
+/**
+ * @listens   PUT api/courses/:id
+ * @desc      Update A Course
+ * @access    Private
+ */
 router.put(
   '/:id',
   authenticateUser,
@@ -137,7 +142,7 @@ router.put(
       .notEmpty()
       .withMessage('Please enter a "description"'),
   ],
-  asyncHandler(async (req, res) => {
+  asycnHandler(async (req, res) => {
     const errors = validationResult(req);
     // If there are validation errors...
     if (!errors.isEmpty()) {
@@ -145,80 +150,51 @@ router.put(
       const errorMessages = errors.array().map(error => error.msg);
       res.status(400).json({ errors: errorMessages });
     } else {
-      // retrieve the course
-      const courseList = await Course.findAll({
-        where: { id: req.params.id },
-        include: [
-          {
-            model: User,
-            as: 'user',
-            attributes: ['id', 'firstName', 'lastName', 'emailAddress'],
-          },
-        ],
-      });
-      const course = courseList[0];
+      Course.findById(req.params.id)
+        .then(course => {
+          // If the course owner Id matches the currently authenticated user Id...
+          if (course.user._id.equals(req.currentUser._id)) {
+            Course.findByIdAndUpdate(req.params.id, req.body).then(course =>
+              res
+                .status(204)
+                .end()
+                .setHeader('Location', `/api/course/${course._id}`)
+            );
+          } else {
+            res.status(403).json({
+              message: 'You can only update your own courses.',
+              currentUser: req.currentUser.emailAddress,
+            });
+          }
+        })
+        .catch(() => res.status(404).json({ message: 'Course Not Found!' }));
+    }
+  })
+);
 
-      // if the course exist...
-      if (course) {
-        // if the course belongs to the current user ...
-        if (course.userId === req.currentUser.id) {
-          await course.update(req.body);
-          res.setHeader('Location', `/api/course/${course.id}`);
-          res.status(204).end();
+/**
+ * @listens   DELETE api/courses/:id
+ * @desc      Delete A Course
+ * @access    Private
+ */
+router.delete(
+  '/:id',
+  authenticateUser,
+  asycnHandler(async (req, res) => {
+    // retrieve the course
+    Course.findById(req.params.id)
+      .then(course => {
+        // If the course owner Id matches the currently authenticated user Id...
+        if (course.user._id.equals(req.currentUser._id)) {
+          Course.findByIdAndRemove(req.params.id).then(course => res.status(204).end());
         } else {
           res.status(403).json({
             message: 'You can only update your own courses.',
             currentUser: req.currentUser.emailAddress,
           });
         }
-      } else {
-        res.status(404).json({ message: 'Course Not Found!' });
-      }
-    }
-  })
-);
-
-/* Delete Courses */
-router.delete(
-  '/:id',
-  authenticateUser,
-  asyncHandler(async (req, res) => {
-    const errors = validationResult(req);
-    // If there are validation errors...
-    if (!errors.isEmpty()) {
-      // Iterate through the errors and get the error messages.
-      const errorMessages = errors.array().map(error => error.msg);
-      res.status(400).json({ errors: errorMessages });
-    } else {
-      // retrieve the course
-      const courseList = await Course.findAll({
-        where: { id: req.params.id },
-        include: [
-          {
-            model: User,
-            as: 'user',
-            attributes: ['id', 'firstName', 'lastName', 'emailAddress'],
-          },
-        ],
-      });
-      const course = courseList[0];
-
-      // if the course exist...
-      if (course) {
-        // if the course belongs to the current user ...
-        if (course.userId === req.currentUser.id) {
-          await course.destroy();
-          res.status(204).end();
-        } else {
-          res.status(403).json({
-            message: 'You can only delete your own courses.',
-            currentUser: req.currentUser.emailAddress,
-          });
-        }
-      } else {
-        res.status(404).json({ message: 'Course Not Found!' });
-      }
-    }
+      })
+      .catch(() => res.status(404).json({ message: 'Course Not Found!' }));
   })
 );
 

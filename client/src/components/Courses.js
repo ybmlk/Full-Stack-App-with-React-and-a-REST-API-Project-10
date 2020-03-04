@@ -23,7 +23,7 @@ class Courses extends Component {
       <div className='bounds'>
         {/* Maps the courses info on cards */}
         {this.state.courses.map(course => (
-          <Card key={course.id} {...course} images={this.state.images} />
+          <Card key={course._id} {...course} images={this.state.images} />
         ))}
 
         <div className='grid-33'>
@@ -54,7 +54,7 @@ const Card = ({ images, ...course }) => {
   const newimg = images[randnum];
   return (
     <div className='grid-33'>
-      <Link to={`/courses/${course.id}`}>
+      <Link to={`/courses/${course._id}`}>
         <Fragment>
           <div className='card'>
             <div className='card-image'>

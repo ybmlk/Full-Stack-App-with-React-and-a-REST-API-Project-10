@@ -1,14 +1,14 @@
 const express = require('express');
 const auth = require('basic-auth');
 const bcryptjs = require('bcryptjs');
-const { Op } = require('sequelize');
 const { check, validationResult } = require('express-validator');
-const { User } = require('../models');
-
 const router = express.Router();
 
-/* Handler function to wrap each function */
-function asyncHandler(cb) {
+// Import Models
+const User = require('../models/User');
+
+/* Handler function to wrap each function with try/cath block */
+const asycnHandler = cb => {
   return async (req, res, next) => {
     try {
       await cb(req, res, next);
@@ -16,17 +16,15 @@ function asyncHandler(cb) {
       res.status(500).send(error);
     }
   };
-}
+};
 
 /* Authentication middleware */
 const authenticateUser = async (req, res, next) => {
   let message = null;
   const credentials = auth(req);
   // If email and password is provided...
-  if (credentials.name && credentials.pass) {
-    const user = await User.findOne({
-      where: { emailAddress: credentials.name },
-    });
+  if (credentials && credentials.name && credentials.pass) {
+    const user = await User.findOne({ emailAddress: credentials.name });
     // If the email provided is found in the database...
     if (user) {
       const authenticated = bcryptjs.compareSync(credentials.pass, user.password);
@@ -52,17 +50,25 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
-/* GET currently authenticated user */
+/**
+ * @listens   GET api/users
+ * @desc      Currently Authenticated User
+ * @access    Private
+ */
 router.get(
   '/',
   authenticateUser,
-  asyncHandler(async (req, res, next) => {
+  asycnHandler(async (req, res, next) => {
     const { id, firstName, lastName, emailAddress } = req.currentUser;
     res.json({ id, firstName, lastName, emailAddress });
   })
 );
 
-/* Create users. */
+/**
+ * @listens   Post api/users
+ * @desc      Create A User
+ * @access    Private
+ */
 router.post(
   '/',
   [
@@ -90,7 +96,7 @@ router.post(
       (value, { req }) => value === req.body.password
     ),
   ],
-  asyncHandler(async (req, res) => {
+  asycnHandler(async (req, res) => {
     const errors = validationResult(req);
     // If there are validation errors...
     if (!errors.isEmpty()) {
@@ -99,18 +105,19 @@ router.post(
       res.status(400).json({ errors: errorMessages });
     } else {
       // Make sure the input email doesn't match an existing email address
-      const existingUser = await User.findAll({
-        where: {
-          emailAddress: { [Op.like]: req.body.emailAddress },
-        },
-      });
+      const existingUser = await User.find({ emailAddress: req.body.emailAddress.toLowerCase() });
+
       // If the email provided is new...
       if (existingUser.length < 1) {
         const user = await req.body;
         user.password = bcryptjs.hashSync(user.password);
-        User.create(user);
-        res.setHeader('Location', '/');
-        res.status(201).end();
+        user.emailAddress = user.emailAddress.toLowerCase();
+        User.create(user).then(() =>
+          res
+            .status(201)
+            .end()
+            .setHeader('Location', '/')
+        );
       } else {
         res.status(400).json({ message: 'User already exists' });
       }
