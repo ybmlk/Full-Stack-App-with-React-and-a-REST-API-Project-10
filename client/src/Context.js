@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Cookies from 'js-cookie';
 import Data from './Data';
 
-// Create a react context 
+// Create a react context
 const Context = React.createContext();
 
 class Provider extends Component {
@@ -56,7 +56,7 @@ class Provider extends Component {
 
 const Consumer = Context.Consumer;
 
-// Is wrapper function which subscribes a component that's passed to it to context 
+// Is wrapper function which subscribes a component that's passed to it to context
 const withContext = Component => {
   return props => {
     return (

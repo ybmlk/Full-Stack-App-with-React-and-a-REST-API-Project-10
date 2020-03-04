@@ -153,7 +153,7 @@ router.put(
       Course.findById(req.params.id)
         .then(course => {
           // If the course owner Id matches the currently authenticated user Id...
-          if (course.user._id.equals(req.currentUser._id)) {
+          if (course.user._id.toString() === req.currentUser._id.toString()) {
             Course.findByIdAndUpdate(req.params.id, req.body).then(course =>
               res
                 .status(204)
@@ -185,8 +185,8 @@ router.delete(
     Course.findById(req.params.id)
       .then(course => {
         // If the course owner Id matches the currently authenticated user Id...
-        if (course.user._id.equals(req.currentUser._id)) {
-          Course.findByIdAndRemove(req.params.id).then(course => res.status(204).end());
+        if (course.user._id.toString() === req.currentUser._id.toString()) {
+          Course.findByIdAndRemove(req.params.id).then(() => res.status(204).end());
         } else {
           res.status(403).json({
             message: 'You can only update your own courses.',

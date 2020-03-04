@@ -71,9 +71,9 @@ class DeleteCourse extends Component {
 
 const Bottom = ({ id, handleDelete }) => (
   <div className='grid-100 pad-bottom'>
-    <Link className='button' onClick={handleDelete} to='/'>
+    <button className='button' onClick={handleDelete}>
       Delete Course
-    </Link>
+    </button>
     <Link className='button button-secondary' to={`/courses/${id}`}>
       Cancel
     </Link>

@@ -59,8 +59,8 @@ router.get(
   '/',
   authenticateUser,
   asycnHandler(async (req, res, next) => {
-    const { id, firstName, lastName, emailAddress } = req.currentUser;
-    res.json({ id, firstName, lastName, emailAddress });
+    const { _id, firstName, lastName, emailAddress } = req.currentUser;
+    res.json({ _id, firstName, lastName, emailAddress });
   })
 );
 
