@@ -2,7 +2,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const cors = require('cors');
 const path = require('path');
 
 // Import routes
@@ -11,9 +10,6 @@ const users = require('./routes/users');
 
 // Create Express app
 const app = express();
-
-// Enable all CORS Requests
-app.use(cors());
 
 // Setup morgan which gives us http request logging
 app.use(morgan('dev'));

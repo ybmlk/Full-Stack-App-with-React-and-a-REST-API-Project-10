@@ -1,9 +1,7 @@
-import config from './config';
-
 // Is a helper class with important methods
 class Data {
   api(path, method = 'GET', body = null, requiresAuth = false, credentials = null) {
-    const url = config.apiBaseUrl + path;
+    const url = '/api' + path;
 
     /* 'option' is consists of the http method, header and body.
     It can be passed as a second argument in fetch request */
