@@ -26,11 +26,15 @@ const db = require('./config/key').mongoURI;
 
 // connect to MongoDB
 mongoose
-  .connect(process.env.MONGODB_URI || db, {
-    // useCreateIndex: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    process.env.MONGODB_URI ||
+      'mongodb+srv://Yonatan:Yonatan123@cluster0-tgtaz.mongodb.net/test?retryWrites=true&w=majority',
+    {
+      useCreateIndex: true,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err));
 
@@ -44,12 +48,12 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 
   // load index.html
-  /* app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  }); */
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+  });
 }
 
 // listen to port
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`Server sterted on port ${port}`));
+app.listen(PORT, () => console.log(`Server sterted on port ${PORT}`));
