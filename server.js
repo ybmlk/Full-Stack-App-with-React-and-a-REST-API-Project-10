@@ -26,7 +26,11 @@ const db = require('./config/key').mongoURI;
 
 // connect to MongoDB
 mongoose
-  .connect(db)
+  .connect(process.env.MONGODB_URI || db, {
+    // useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err));
 
@@ -37,7 +41,7 @@ app.use('/api/users', users);
 // Serve static assets if in production(aka deploy)
 if (process.env.NODE_ENV === 'production') {
   // Set static folder
-  app.use(express.static('/client/build'));
+  app.use(express.static('client/build'));
 
   // load index.html
   /* app.get('*', (req, res) => {
