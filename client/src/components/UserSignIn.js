@@ -3,8 +3,8 @@ import { Link, Redirect } from 'react-router-dom';
 
 class UserSignIn extends Component {
   state = {
-    emailAddress: '',
-    password: '',
+    emailAddress: 'john@smith.com',
+    password: 'john12345',
     errors: [],
   };
 
