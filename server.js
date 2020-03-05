@@ -26,7 +26,7 @@ const db = require('./config/key').mongoURI;
 
 // connect to MongoDB
 mongoose
-  .connect(db, {
+  .connect(process.env.MONGODB_URI || db, {
     // useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
