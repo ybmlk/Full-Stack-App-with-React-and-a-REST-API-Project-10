@@ -12,6 +12,8 @@
 
 This application is a full stack program with React frontend and Node.JS backend. This app is an amateur version of Udemy (an online course platform). It allows users to read, create, update and delete courses. The application incorporates user authentication, thus users can only update or delete only cousrses they created.
 
+## This app is Live at: [https://udemy-clone-proj.herokuapp.com/](https://udemy-clone-proj.herokuapp.com/)
+
 ---
 
 ## Technologies
