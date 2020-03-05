@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
+const path = require('path');
 
 // Import routes
 const courses = require('./routes/courses');
@@ -32,6 +33,17 @@ mongoose
 // Use Routes
 app.use('/api/courses', courses);
 app.use('/api/users', users);
+
+// Serve static assets if in production(aka deploy)
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static('../client/build'));
+
+  // load index.html
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../', 'client', 'build', 'index.html'));
+  });
+}
 
 // listen to port
 const port = process.env.PORT || 5000;
