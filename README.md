@@ -29,12 +29,11 @@ This application is a full stack program with React frontend and Node.JS backend
 1. Download Project Files
 
 2. Install project dependencies
-    - Navigate to /api directory and run `npm install`
+    - Run `npm install` to install server dependecies
     
-    - Navigate to /client directory and run `npm install`
+    - Run `npm run client-install` to install client dependencies
   
-3. Run Project
-    - Navigate to the root directory and run `npm start`
+3. Run `npm run dev` to start the app
 
 4. The project is live at `http://localhost:3000/` 
 
