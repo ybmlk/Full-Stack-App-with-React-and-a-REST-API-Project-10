@@ -1,16 +1,12 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, memo, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
-class CourseDetail extends Component {
-  state = {
-    course: {},
-    user: {},
-  };
+const CourseDetail = ({ context: { data, authenticatedUser }, match, history }) => {
+  const [course, setCourse] = useState({});
+  const [user, setUser] = useState({});
 
-  componentDidMount() {
-    const { context, match } = this.props;
-    const { data } = context;
+  useEffect(() => {
     const id = match.params.id;
     // Retrieves a courses with a given 'id'
     data
@@ -19,43 +15,38 @@ class CourseDetail extends Component {
         // If the course exists it updates the state with the corse details and owner
         if (res.status === 200) {
           const course = await res.json();
-          this.setState(() => ({
-            course: course,
-            user: course.user,
-          }));
+          setCourse(course);
+          setUser(course.user);
           // else it renders '404' page
         } else {
-          this.props.history.push('/notfound');
+          history.push('/notfound');
         }
       })
       .catch(err => {
         console.log(err);
-        this.props.history.push('/error');
+        history.push('/error');
       });
-  }
+  }, []);
 
-  render() {
-    const { context } = this.props;
-    // Stores the authenticated User's Id
-    const authUser = context.authenticatedUser ? context.authenticatedUser._id : null;
-    // Stores the course owner's Id
-    const owner = this.state.user._id;
+  // Stores the authenticated User's Id
+  const authUser = authenticatedUser ? authenticatedUser._id : null;
+  // Stores the course owner's Id
+  const owner = user._id;
 
-    return (
-      <div>
-        <ActionsBar authUser={authUser} owner={owner} id={this.state.course._id} />
-        <div className='bounds course--detail'>
-          <Body {...this.state.course} {...this.state.user} />
-          <SideBar {...this.state.course} />
-        </div>
+  return (
+    <div>
+      <ActionsBar authUser={authUser} owner={owner} id={course._id} />
+      <div className='bounds course--detail'>
+        <Body {...course} {...user} />
+        <SideBar {...course} />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 const ActionsBar = ({ authUser, owner, id }) => {
   return (
-    <React.Fragment>
+    <Fragment>
       {owner !== undefined && (
         <div className='actions--bar'>
           <div className='bounds'>
@@ -79,7 +70,7 @@ const ActionsBar = ({ authUser, owner, id }) => {
           </div>
         </div>
       )}
-    </React.Fragment>
+    </Fragment>
   );
 };
 
@@ -119,4 +110,4 @@ const SideBar = ({ estimatedTime, materialsNeeded }) => {
   );
 };
 
-export default CourseDetail;
+export default memo(CourseDetail);
