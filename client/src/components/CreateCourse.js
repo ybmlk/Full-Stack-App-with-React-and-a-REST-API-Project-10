@@ -1,54 +1,41 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 
-class CreateCourse extends Component {
-  constructor({ context }) {
-    super();
-    this.context = context;
-    // 'data' is a helper class with useful methods
-    this.data = this.context.data;
-    // The currently authenticated user's info is stored in 'authenticatedUser'
-    this.authUser = this.context.authenticatedUser;
-  }
+const CreateCourse = ({ history, context: { data, authenticatedUser: authUser } }) => {
+  const [course, setCourse] = useState({
+    title: '',
+    description: '',
+    estimatedTime: '',
+    materialsNeeded: '',
+  });
 
-  state = {
-    course: {
-      title: '',
-      description: '',
-      estimatedTime: '',
-      materialsNeeded: '',
-    },
-    user: {
-      firstName: '',
-      lastName: '',
-    },
-    errors: [],
-  };
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+  });
 
-  componentDidMount() {
-    this.setState(() => ({
-      user: this.authUser,
-    }));
-  }
+  const [errors, setError] = useState([]);
+
+  useEffect(() => {
+    setUser({ authUser });
+  }, []);
 
   /* Is called when there is a change in input data.
   stores the input data in the corresponding course property */
-  change = e => {
+  const change = e => {
     const name = e.target.name;
     const value = e.target.value;
-    let course = this.state.course;
     course[name] = value;
-    this.setState(() => ({ course }));
+    setCourse({ ...course });
   };
 
   // Is called when the form is submited
-  submit = e => {
+  const submit = e => {
     e.preventDefault();
-    const course = this.state.course;
-    const username = this.authUser.emailAddress;
-    const password = this.authUser.password;
+    const username = authUser.emailAddress;
+    const password = authUser.password;
 
-    this.data
+    data
       /* Passes the course's data, the currently authenticated user's
       username and password as an argument to create a new course */
       .createCourse(course, username, password)
@@ -59,40 +46,36 @@ class CreateCourse extends Component {
           // Gets the newly created course's Id
           const { courseId } = course;
           // ... and redirects to read mode
-          this.props.history.push(`/courses/${courseId}`);
+          history.push(`/courses/${courseId}`);
         } else {
           const data = await res.json();
           // Error message for invalid inputs is stored in 'errors'
-          this.setState(() => ({
-            errors: data.errors,
-          }));
+          setError(data.errors);
         }
       })
       .catch(err => {
         console.log(err);
-        this.props.history.push('/error');
+        history.push('/error');
       });
   };
 
-  render() {
-    return (
-      <div>
-        <div className='bounds course--detail'>
-          <h1>Create Course</h1>
-          <div>
-            {/* displays errors due to invalid input */}
-            <ErrorsDisplay errors={this.state.errors} />
-            <form onSubmit={this.submit}>
-              <Body {...this.state.course} {...this.state.user} change={this.change} />
-              <SideBar {...this.state.course} change={this.change} />
-              <Bottom  />
-            </form>
-          </div>
+  return (
+    <div>
+      <div className='bounds course--detail'>
+        <h1>Create Course</h1>
+        <div>
+          {/* displays errors due to invalid input */}
+          <ErrorsDisplay errors={errors} />
+          <form onSubmit={submit}>
+            <Body {...course} {...user} change={change} />
+            <SideBar {...course} change={change} />
+            <Bottom />
+          </form>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 const Body = ({ title, description, firstName, lastName, change }) => (
   <div className='grid-66'>
@@ -191,4 +174,4 @@ const ErrorsDisplay = ({ errors }) => {
   return null;
 };
 
-export default CreateCourse;
+export default memo(CreateCourse);
