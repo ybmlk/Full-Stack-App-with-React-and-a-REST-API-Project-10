@@ -11,15 +11,10 @@ import CourseDetail from './components/CourseDetail';
 import UserSignIn from './components/UserSignIn';
 import UserSignUp from './components/UserSignUp';
 import UserSignOut from './components/UserSignOut';
-import withContext from './Context';
 import PrivateRoute from './PrivateRoute';
 import Forbidden from './components/error/Forbidden';
 import UnhandledError from './components/error/UnhandledError';
 import NotFound from './components/error/NotFound';
-
-// Connect componets to context
-const UserSignUpWithContext = withContext(UserSignUp);
-const UserSignOutWithContext = withContext(UserSignOut);
 
 const App = () => (
   <Router>
@@ -32,8 +27,8 @@ const App = () => (
         <PrivateRoute path='/courses/:id/delete' component={DeleteCourse} />
         <Route path='/courses/:id' component={CourseDetail} />
         <Route path='/signin' component={UserSignIn} />
-        <Route path='/signup' component={UserSignUpWithContext} />
-        <Route path='/signout' component={UserSignOutWithContext} />
+        <Route path='/signup' component={UserSignUp} />
+        <Route path='/signout' component={UserSignOut} />
         <Route path='/forbidden' component={Forbidden} />
         <Route path='/error' component={UnhandledError} />
         <Route path='/notfound' component={NotFound} />

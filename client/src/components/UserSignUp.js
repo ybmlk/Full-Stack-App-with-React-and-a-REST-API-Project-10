@@ -1,172 +1,149 @@
-import React, { Component } from 'react';
+import React, { useContext, useState } from 'react';
 import { Redirect, Link } from 'react-router-dom';
+import { Context } from '../Context';
+import ErrorsDisplay from './ErrorsDisplay';
 
-class UserSignUp extends Component {
-  constructor({ context }) {
-    super();
-    this.context = context;
-    this.data = this.context.data;
-    this.actions = this.context.actions;
-  }
+const UserSignUp = ({ location, history }) => {
+  // State declaration
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    emailAddress: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [errors, setErrors] = useState([]);
 
-  state = {
-    user: {
-      firstName: '',
-      lastName: '',
-      emailAddress: '',
-      password: '',
-      confirmPassword: '',
-    },
-    errors: [],
-  };
+  // Import authenticated user,  'data' class and 'SignIn' function from Context
+  const { authenticatedUser, data, actions } = useContext(Context);
 
   /* Is called when there is a change in input data. stores the 
   input data in the corresponding user property state */
-  change = e => {
+  const change = e => {
     const name = e.target.name;
     const value = e.target.value;
-    const user = this.state.user;
     user[name] = value;
-    this.setState(() => ({ user }));
+    setUser({ ...user });
   };
 
-  submit = e => {
+  const submit = e => {
     e.preventDefault();
-    const { user } = this.state;
     // Path the user attempted to access before authentication or Homepage
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
-    const { emailAddress, password } = this.state.user;
+    const { from } = location.state || { from: { pathname: '/' } };
 
-    this.data
-      /* Passes the currently authenticated user's username and passwrd 
-      as an argument to create a new user */
+    // Destructure the user state values
+    const { emailAddress, password } = user;
+
+    data
+      // Passes the user data as an argument to create a new user
       .createUser(user)
       .then(async res => {
         // If the user is created...
         if (res.status === 201) {
-          this.actions.signIn(emailAddress, password).then(data => {
-            this.props.history.push(from);
-            console.log(`SUCCESS! ${data.user.firstName} ${data.user.lastName} is now signed in!`);
+          actions.signIn(emailAddress, password).then(async data => {
+            history.push(from);
+            console.log(data);
+            await console.log(`SUCCESS! ${data.user.firstName} ${data.user.lastName} is now signed in!`);
           });
         } else {
           const data = await res.json();
           // Stores error message for invalid inputs
-          this.setState(() => ({
-            errors: data.errors,
-          }));
+          setErrors(data.errors);
         }
       })
       .catch(err => {
         console.log(err);
-        this.props.history.push('/error');
+        history.push('/error');
       });
   };
 
-  render() {
-    const { firstName, lastName, emailAddress, password, confirmPassword } = this.state.user;
-    const { context } = this.props;
-    // If there is an authenticated user '/signup' will redirect to '/'
-    if (context.authenticatedUser) {
-      return <Redirect to='/' />;
-    }
+  // Destructure the user state values
+  const { firstName, lastName, emailAddress, password, confirmPassword } = user;
 
-    return (
-      <div className='bounds'>
-        <div className='grid-33 centered signin'>
-          <h1>Sign Up</h1>
-          <div>
-            <ErrorsDisplay errors={this.state.errors} />
-            <form onSubmit={this.submit}>
-              <div>
-                <input
-                  id='firstName'
-                  name='firstName'
-                  type='text'
-                  className=''
-                  placeholder='First Name'
-                  value={firstName}
-                  onChange={this.change}
-                />
-              </div>
-              <div>
-                <input
-                  id='lastName'
-                  name='lastName'
-                  type='text'
-                  className=''
-                  placeholder='Last Name'
-                  value={lastName}
-                  onChange={this.change}
-                />
-              </div>
-              <div>
-                <input
-                  id='emailAddress'
-                  name='emailAddress'
-                  type='text'
-                  className=''
-                  placeholder='Email Address'
-                  value={emailAddress}
-                  onChange={this.change}
-                />
-              </div>
-              <div>
-                <input
-                  id='password'
-                  name='password'
-                  type='password'
-                  className=''
-                  placeholder='Password'
-                  value={password}
-                  onChange={this.change}
-                />
-              </div>
-              <div>
-                <input
-                  id='confirmPassword'
-                  name='confirmPassword'
-                  type='password'
-                  className=''
-                  placeholder='Confirm Password'
-                  value={confirmPassword}
-                  onChange={this.change}
-                />
-              </div>
-              <div className='pad-bottom grid-100-padding'>
-                <button className='button' type='submit'>
-                  Sign Up
-                </button>
-                <Link className='button button-secondary' to='/'>
-                  Cancel
-                </Link>
-              </div>
-            </form>
-          </div>
-          <p>&nbsp;</p>
-          <p>
-            Already have a user account? <Link to='/signin'>Click here</Link> to sign in!
-          </p>
-        </div>
-      </div>
-    );
+  // If there is an authenticated user '/signup' will redirect to '/'
+  if (authenticatedUser) {
+    return <Redirect to='/' />;
   }
-}
 
-const ErrorsDisplay = ({ errors }) => {
-  if (errors.length) {
-    return (
-      <div>
-        <div className='validation-errors'>
-          <ul>
-            {errors.map((error, i) => (
-              <li key={i}>{error}</li>
-            ))}
-          </ul>
+  return (
+    <div className='bounds'>
+      <div className='grid-33 centered signin'>
+        <h1>Sign Up</h1>
+        <div>
+          <ErrorsDisplay errors={errors} />
+          <form onSubmit={submit}>
+            <div>
+              <input
+                id='firstName'
+                name='firstName'
+                type='text'
+                className=''
+                placeholder='First Name'
+                value={firstName}
+                onChange={change}
+              />
+            </div>
+            <div>
+              <input
+                id='lastName'
+                name='lastName'
+                type='text'
+                className=''
+                placeholder='Last Name'
+                value={lastName}
+                onChange={change}
+              />
+            </div>
+            <div>
+              <input
+                id='emailAddress'
+                name='emailAddress'
+                type='text'
+                className=''
+                placeholder='Email Address'
+                value={emailAddress}
+                onChange={change}
+              />
+            </div>
+            <div>
+              <input
+                id='password'
+                name='password'
+                type='password'
+                className=''
+                placeholder='Password'
+                value={password}
+                onChange={change}
+              />
+            </div>
+            <div>
+              <input
+                id='confirmPassword'
+                name='confirmPassword'
+                type='password'
+                className=''
+                placeholder='Confirm Password'
+                value={confirmPassword}
+                onChange={change}
+              />
+            </div>
+            <div className='pad-bottom grid-100-padding'>
+              <button className='button' type='submit'>
+                Sign Up
+              </button>
+              <Link className='button button-secondary' to='/'>
+                Cancel
+              </Link>
+            </div>
+          </form>
         </div>
+        <p>&nbsp;</p>
+        <p>
+          Already have a user account? <Link to='/signin'>Click here</Link> to sign in!
+        </p>
       </div>
-    );
-  }
-  return null;
+    </div>
+  );
 };
 
 export default UserSignUp;

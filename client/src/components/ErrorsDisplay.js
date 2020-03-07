@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 const ErrorsDisplay = ({ errors }) => {
   if (errors.length) {
@@ -18,4 +18,4 @@ const ErrorsDisplay = ({ errors }) => {
   return null;
 };
 
-export default ErrorsDisplay;
+export default memo(ErrorsDisplay);

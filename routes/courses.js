@@ -25,7 +25,7 @@ const authenticateUser = async (req, res, next) => {
   const credentials = auth(req);
   // If email and password is provided...
   if (credentials && credentials.name && credentials.pass) {
-    const user = await User.findOne({ emailAddress: credentials.name });
+    const user = await User.findOne({ emailAddress: credentials.name.toLowerCase() });
     // If the email provided is found in the database...
     if (user) {
       const authenticated = bcryptjs.compareSync(credentials.pass, user.password);
