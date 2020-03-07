@@ -1,203 +1,88 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import useGetCourse from '../hooks/useGetCourse';
+import { Context } from '../Context';
+import Body from './Body';
+import SideBar from './SideBar';
+import BottomBar from './BottomBar';
+import ErrorsDisplay from './ErrorsDisplay';
 
-class UpdateCourse extends Component {
-  constructor({ context, match }) {
-    super();
-    this.context = context;
-    this.match = match;
-    // 'data' is a helper class with useful methods
-    this.data = this.context.data;
-    this.authUser = this.context.authenticatedUser;
-  }
+const UpdateCourse = ({ match, history }) => {
+  // State declaration
+  const [course, setCourse] = useState({
+    title: '',
+    description: '',
+    estimatedTime: '',
+    materialsNeeded: '',
+  });
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+  });
+  const [errors, setError] = useState([]);
 
-  state = {
-    course: {
-      title: '',
-      description: '',
-      estimatedTime: '',
-      materialsNeeded: '',
-    },
-    user: {
-      firstName: '',
-      lastName: '',
-    },
-    errors: [],
-  };
+  // Course id from param
+  const id = match.params.id;
 
-  componentDidMount() {
-    const { id } = this.match.params;
-    this.data
-      // Retrieves a course with a given 'Id'
-      .getCourse(id)
-      .then(async res => {
-        if (res.status === 200) {
-          const course = await res.json();
-          this.setState(() => ({
-            course: course,
-            user: course.user,
-          }));
-        } else {
-          this.props.history.push('/notfound');
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        this.props.history.push('/error');
-      });
-  }
+  // Retrieves a courses with a given 'id'
+  const [fetchedCourse] = useGetCourse(id, history);
+
+  // Retrieves the authenticated user and data from context
+  const { authenticatedUser: authUser, data } = useContext(Context);
+
+  useEffect(() => {
+    // Checks if the course is fetched and and assigns it to course state
+    if (fetchedCourse._id) {
+      setCourse(fetchedCourse);
+      setUser(fetchedCourse.user);
+    }
+  }, [fetchedCourse]);
 
   // Is called when there is change in input, and updates the state with the input data
-  change = e => {
+  const change = e => {
     const name = e.target.name;
     const value = e.target.value;
-    let course = this.state.course;
     course[name] = value;
-    this.setState(() => ({ course }));
+    setCourse({ ...course });
   };
 
-  submit = e => {
+  const submit = e => {
     e.preventDefault();
-    const { id } = this.match.params;
-    const { course } = this.state;
-    const { emailAddress, password } = this.authUser;
+    const { emailAddress, password } = authUser;
 
-    this.data
+    data
       /* Passes the course's Id, the currently authenticated user's (who is also the owner)
       email and password as an argument to update the course */
       .updateCourse(id, course, emailAddress, password)
       .then(async res => {
         if (res.status === 204) {
-          this.props.history.push(`/courses/${id}`);
+          history.push(`/courses/${id}`);
         } else {
           const data = await res.json();
           // Stores error messages for invalid inputs
-          this.setState(() => ({
-            errors: data.errors,
-          }));
+          setError(data.errors);
         }
       })
       .catch(err => {
         console.log(err);
-        this.props.history.push('/error');
+        history.push('/error');
       });
   };
 
-  render() {
-    const { id } = this.match.params;
-    return (
-      <div>
-        <div className='bounds course--detail'>
-          <h1>Update Course</h1>
-          <div>
-            <ErrorsDisplay errors={this.state.errors} />
-            <form onSubmit={this.submit}>
-              <Body {...this.state.course} {...this.state.user} change={this.change} />
-              <SideBar {...this.state.course} change={this.change} />
-              <Bottom id={id} />
-            </form>
-          </div>
+  return (
+    <div>
+      <div className='bounds course--detail'>
+        <h1>Update Course</h1>
+        <div>
+          <ErrorsDisplay errors={errors} />
+          <form onSubmit={submit}>
+            <Body {...course} {...user} change={change} />
+            <SideBar {...course} change={change} />
+            <BottomBar id={id} page='update' />
+          </form>
         </div>
       </div>
-    );
-  }
-}
-
-const Body = ({ title, description, firstName, lastName, change }) => (
-  <div className='grid-66'>
-    <div className='course--header'>
-      <h4 className='course--label'>Course</h4>
-      <div>
-        <input
-          id='title'
-          name='title'
-          type='text'
-          className='input-title course--title--input'
-          placeholder='Course title...'
-          value={title}
-          onChange={change}
-        />
-      </div>
-      <p>By {`${firstName} ${lastName}`}</p>
     </div>
-    <div className='course--description'>
-      <div>
-        <textarea
-          id='description'
-          name='description'
-          className=''
-          placeholder='Course description...'
-          value={description}
-          onChange={change}
-        ></textarea>
-      </div>
-    </div>
-  </div>
-);
-
-const SideBar = ({ estimatedTime, materialsNeeded, change }) => (
-  <div className='grid-25 grid-right'>
-    <div className='course--stats'>
-      <ul className='course--stats--list'>
-        <li className='course--stats--list--item'>
-          <h4>Estimated Time</h4>
-          <div>
-            <input
-              id='estimatedTime'
-              name='estimatedTime'
-              type='text'
-              className='course--time--input'
-              placeholder='Hours'
-              value={estimatedTime === null ? '' : estimatedTime}
-              onChange={change}
-            />
-          </div>
-        </li>
-        <li className='course--stats--list--item'>
-          <h4>Materials Needed</h4>
-          <div>
-            <textarea
-              id='materialsNeeded'
-              name='materialsNeeded'
-              className=''
-              placeholder='List materials...'
-              value={materialsNeeded === null ? '' : materialsNeeded}
-              onChange={change}
-            ></textarea>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
-
-const Bottom = ({ id }) => (
-  <div className='grid-100 pad-bottom'>
-    <button className='button' type='submit'>
-      Update Course
-    </button>
-    <Link className='button button-secondary' to={`/courses/${id}`}>
-      Cancel
-    </Link>
-  </div>
-);
-
-const ErrorsDisplay = ({ errors }) => {
-  if (errors.length) {
-    return (
-      <div>
-        <h2 className='validation--errors--label'>Invalid Input</h2>
-        <div className='validation-errors'>
-          <ul>
-            {errors.map((error, i) => (
-              <li key={i}>{error}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    );
-  }
-  return null;
+  );
 };
 
 export default UpdateCourse;

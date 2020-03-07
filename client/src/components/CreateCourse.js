@@ -1,24 +1,30 @@
-import React, { useEffect, useState, memo } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Context } from '../Context';
+import Body from './Body';
+import SideBar from './SideBar';
+import BottomBar from './BottomBar';
+import ErrorsDisplay from './ErrorsDisplay';
 
-const CreateCourse = ({ history, context: { data, authenticatedUser: authUser } }) => {
+const CreateCourse = ({ history }) => {
+  // State declaration
   const [course, setCourse] = useState({
     title: '',
     description: '',
     estimatedTime: '',
     materialsNeeded: '',
   });
-
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
   });
-
   const [errors, setError] = useState([]);
 
+  // Retrieves the authenticated user and 'data' class from context
+  const { authenticatedUser: authUser, data } = useContext(Context);
+
   useEffect(() => {
-    setUser({ authUser });
-  }, []);
+    setUser(authUser);
+  }, [authUser]);
 
   /* Is called when there is a change in input data.
   stores the input data in the corresponding course property */
@@ -69,7 +75,7 @@ const CreateCourse = ({ history, context: { data, authenticatedUser: authUser } 
           <form onSubmit={submit}>
             <Body {...course} {...user} change={change} />
             <SideBar {...course} change={change} />
-            <Bottom />
+            <BottomBar page='create' />
           </form>
         </div>
       </div>
@@ -77,101 +83,4 @@ const CreateCourse = ({ history, context: { data, authenticatedUser: authUser } 
   );
 };
 
-const Body = ({ title, description, firstName, lastName, change }) => (
-  <div className='grid-66'>
-    <div className='course--header'>
-      <h4 className='course--label'>Course</h4>
-      <div>
-        <input
-          id='title'
-          name='title'
-          type='text'
-          className='input-title course--title--input'
-          placeholder='Course title...'
-          value={title}
-          onChange={change}
-        />
-      </div>
-      <p>By {`${firstName} ${lastName}`}</p>
-    </div>
-    <div className='course--description'>
-      <div>
-        <textarea
-          id='description'
-          name='description'
-          className=''
-          placeholder='Course description...'
-          value={description}
-          onChange={change}
-        ></textarea>
-      </div>
-    </div>
-  </div>
-);
-
-const SideBar = ({ estimatedTime, materialsNeeded, change }) => (
-  <div className='grid-25 grid-right'>
-    <div className='course--stats'>
-      <ul className='course--stats--list'>
-        <li className='course--stats--list--item'>
-          <h4>Estimated Time</h4>
-          <div>
-            <input
-              id='estimatedTime'
-              name='estimatedTime'
-              type='text'
-              className='course--time--input'
-              placeholder='Hours'
-              value={estimatedTime === null ? '' : estimatedTime}
-              onChange={change}
-            />
-          </div>
-        </li>
-        <li className='course--stats--list--item'>
-          <h4>Materials Needed</h4>
-          <div>
-            <textarea
-              id='materialsNeeded'
-              name='materialsNeeded'
-              className=''
-              placeholder='List materials...'
-              value={materialsNeeded === null ? '' : materialsNeeded}
-              onChange={change}
-            ></textarea>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
-
-const Bottom = () => (
-  <div className='grid-100 pad-bottom'>
-    <button className='button' type='submit'>
-      Create Course
-    </button>
-    <Link className='button button-secondary' to='/'>
-      Cancel
-    </Link>
-  </div>
-);
-
-const ErrorsDisplay = ({ errors }) => {
-  if (errors.length) {
-    return (
-      <div>
-        <h2 className='validation--errors--label'>Invalid Input</h2>
-        <div className='validation-errors'>
-          <ul>
-            {errors.map((error, i) => (
-              <li key={i}>{error}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    );
-  }
-  return null;
-};
-
-export default memo(CreateCourse);
+export default CreateCourse;

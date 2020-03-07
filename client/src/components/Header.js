@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Fragment, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { Context } from '../Context';
 
-const Header = ({ context }) => {
-  // The currently authenticated user's info is stored in 'authenticatedUser'
-  const authUser = context.authenticatedUser;
+const Header = () => {
+  const { authenticatedUser: authUser } = useContext(Context);
   return (
-    <React.Fragment>
+    <Fragment>
       <div className='header'>
         <div className='bounds'>
           <Link to='/'>
@@ -13,31 +13,31 @@ const Header = ({ context }) => {
           </Link>
           <nav>
             {/* If there's authenticated user it'll show the name and 'Sign Out' 
-            else it'll show 'Sign Up' and 'Sign In; */}
+              else it'll show 'Sign Up' and 'Sign In; */}
             {authUser ? (
-              <React.Fragment>
+              <Fragment>
                 <span>
                   Welcome, {authUser.firstName} {authUser.lastName}!
                 </span>
                 <Link className='signout' to='/signout'>
                   Sign Out
                 </Link>
-              </React.Fragment>
+              </Fragment>
             ) : (
-              <React.Fragment>
+              <Fragment>
                 <Link className='signup' to='/signup'>
                   Sign Up
                 </Link>
                 <Link className='signin' to='/signin'>
                   Sign In
                 </Link>
-              </React.Fragment>
+              </Fragment>
             )}
           </nav>
         </div>
       </div>
       <hr />
-    </React.Fragment>
+    </Fragment>
   );
 };
 
