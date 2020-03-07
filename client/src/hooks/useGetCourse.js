@@ -26,7 +26,7 @@ const useGetCourse = (id, history) => {
         console.log(err);
         history.push('/error');
       });
-  }, [id]);
+  }, [id, data, history]);
 
   return [course, user];
 };

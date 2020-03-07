@@ -17,7 +17,7 @@ const Courses = () => {
   useEffect(() => {
     // Stores all the courses retrieved from the server in the 'courses' state
     data.getCourses().then(newCourses => setCourses(newCourses));
-  }, []);
+  }, [data]);
 
   return (
     <div className='bounds'>

@@ -52,6 +52,4 @@ const Provider = ({ children }) => {
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
 
-const Consumer = Context.Consumer;
-
-export { Provider, Consumer, Context };
+export { Provider, Context };
