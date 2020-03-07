@@ -1,13 +1,18 @@
-import React, { useState, useEffect, Fragment, memo } from 'react';
+import React, { useState, useEffect, Fragment, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import image1 from '../../src/img/img1.png';
 import image2 from '../../src/img/img2.jpg';
 import image3 from '../../src/img/img3.png';
 import image4 from '../../src/img/img4.png';
+import { Context } from '../Context';
 
-const Courses = ({ context: { data } }) => {
+const Courses = () => {
+  // State declaration
   const [courses, setCourses] = useState([]);
   const images = [image1, image2, image3, image4];
+
+  // Import the 'data' class from context
+  const { data } = useContext(Context);
 
   useEffect(() => {
     // Stores all the courses retrieved from the server in the 'courses' state
@@ -71,4 +76,4 @@ const Card = ({ images, ...course }) => {
   );
 };
 
-export default memo(Courses);
+export default Courses;
