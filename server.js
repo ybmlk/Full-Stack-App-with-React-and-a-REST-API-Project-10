@@ -34,6 +34,15 @@ mongoose
 app.use('/api/courses', courses);
 app.use('/api/users', users);
 
+// To fix react routing issue when deployed
+app.get('/*', (req, res) => {
+  let url = path.join(__dirname, '../client/build', 'index.html');
+  if (!url.startsWith('/app/'))
+    // we're on local windows
+    url = url.substring(1);
+  res.sendFile(url);
+});
+
 // Serve static assets if in production(aka deploy)
 if (process.env.NODE_ENV === 'production') {
   // Set static folder
