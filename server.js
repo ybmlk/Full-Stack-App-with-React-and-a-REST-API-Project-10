@@ -36,7 +36,7 @@ app.use('/api/users', users);
 
 // To fix react routing issue when deployed
 app.get('/*', (req, res) => {
-  let url = path.join(__dirname, '../client/build', 'index.html');
+  let url = path.join(__dirname, '/client/build', 'index.html');
   if (!url.startsWith('/app/'))
     // we're on local windows
     url = url.substring(1);
