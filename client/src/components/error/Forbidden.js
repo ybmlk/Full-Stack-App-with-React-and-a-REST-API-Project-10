@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 /* The user is redirected to this componet if they try to access unauthorized path
 e.g trying to update/delete courses created by other users*/
 const Forbidden = ({ location }) => {
-  const back = location.state.fromForbidden.pathname.replace('/update', '').replace('/delete', '');
+  const back = location.state ?
+    location.state.fromForbidden.pathname.replace('/update', '').replace('/delete', '') : '/';
   return (
     <div className='bounds'>
       <h1>Forbidden</h1>
